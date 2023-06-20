@@ -7,6 +7,7 @@ from NorenRestApiPy.NorenApi import NorenApi
 import pyotp
 import traceback
 import warnings
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -64,12 +65,57 @@ def favicon():
 
 @app.route('/hello', methods=['POST'])
 def hello():
-    
+    runningcount = 0
+    runningpositions = FinvasiaClient.get_positions()
+    if not (runningpositions is None):
+        runningpositions = pd.DataFrame(runningpositions)
+        runningpositions = runningpositions.reset_index()
+        strategycm2m = 0.0
+        allm2m = 0.0
+        strikeCE = ''
+        strikePE = ''
+        cem2mquantity = 0
+        pem2mquantity = 0
+        tartgetm2m = 0
+        #tartgetm2m = int(int(OrderQuantity) * 12)
+        
+        #print(runningpositions.loc[runningpositions['openbuyqty']])
+        for index, row in runningpositions.iterrows():
+            #allm2m = allm2m +  float(row['urmtom'])
+            if (row['netqty'] != '0'):
+                #print(row['tsym'], row['netqty'], row['urmtom'] )
+                strategycm2m = strategycm2m +  float(row['urmtom'])
+                
+                if 'C' in row['tsym']:
+                    strikeCE = row['tsym']
+                    cem2mquantity = int(row['netqty'])
+                if 'P' in row['tsym']:
+                    strikePE = row['tsym']
+                    pem2mquantity = int(row['netqty'])
+            
+        print("strikeCE: " + str(strikeCE))
+        print("pem2mquantity: " + str(pem2mquantity))
+        print("strikePE: " + str(strikePE))
+        print("cem2mquantity: " + str(cem2mquantity))
+        print("allm2m: " + str(allm2m))
+        print("strategycm2m: " + str(strategycm2m))
+        #print('Total Current M2M: ' + str(cm2m) + '  Target: ' + str(tartgetm2m))
+        #print("---")
+        #time.sleep(60)
+        runningpositions = runningpositions.loc[runningpositions['netqty'] != '0']
+        urmtom = runningpositions.loc[runningpositions['urmtom'] != '0']
+        
+        runningcount = len(runningpositions.index)
+        print("Running count: " + str(runningcount))
+
+
+
+
     name = request.form.get('name')
     
     if name:
-       print('Request for hello page received with name=%s' % name)
-       return render_template('hello.html', name = name)
+       print('Request for hello page received with name=%s' % strategycm2m)
+       return render_template('hello.html', name = strategycm2m)
     else:
        print('Request for hello page received with no name or blank name -- redirecting')
        return redirect(url_for('index'))
