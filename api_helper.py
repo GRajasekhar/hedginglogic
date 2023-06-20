@@ -2,8 +2,6 @@
 from threading import Timer
 import pandas as pd
 import time
-import sys
-import subprocess
 
 #subprocess.check_call([sys.executable, "-m", "pip", "install", "./NorenRestApiPy-0.0.16-py2.py3-none-any.whl"])
 from NorenRestApiPy.NorenApi import  NorenApi
