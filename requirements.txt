@@ -5,4 +5,3 @@ pyotp
 traceback
 warnings
 pandas
-NorenApi
