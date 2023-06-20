@@ -1,2 +1,5 @@
-Flask==2.0.2
-gunicorn
+Flask==2.3.2
+NorenRestApiPy==0.0.16
+NorenRestApiPy==0.0.22
+pandas==2.0.0
+pyotp==2.7.0
