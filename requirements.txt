@@ -1,7 +1,2 @@
 Flask==2.0.2
 gunicorn
-NorenRestApiPy
-pyotp
-traceback
-warnings
-pandas
