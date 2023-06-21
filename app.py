@@ -1,7 +1,7 @@
 import os
 from api_helper import ShoonyaApiPy
 from flask import (Flask, redirect, render_template, request,
-                   send_from_directory, url_for)
+                   send_from_directory, url_for, jsonify)
 from api_helper import ShoonyaApiPy
 from NorenRestApiPy.NorenApi import NorenApi
 import pyotp
@@ -10,8 +10,13 @@ import warnings
 import pandas as pd
 import requests
 import websocket
-app = Flask(__name__)
+from threading import Thread
+import time
+#pipreqs . pip install pipreqs
 
+app = Flask(__name__)
+app.config['INITIAL_TEXT'] = 'Initial text'  # Initial text value
+count = 0
 uid = str('FA75410')
 pwd = str('Nar7@198983')
 factor2 = str('15-04-1983')
@@ -64,8 +69,21 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-@app.route('/hello', methods=['POST'])
-def hello():
+
+def update_text_background_task():
+    with app.app_context():
+        while True:
+            # Perform any necessary data updates here
+            updated_text = 'Updated text: ' + str(time.time())
+            app.config['INITIAL_TEXT'] = updated_text
+            time.sleep(1)  # Wait for 1 second before the next update
+
+@app.route('/get_text')
+def get_text():
+    global FinvasiaClient
+    global count
+    # Perform any necessary text retrieval here
+    text = "Initial text"
     runningcount = 0
     runningpositions = FinvasiaClient.get_positions()
     if not (runningpositions is None):
@@ -83,9 +101,10 @@ def hello():
         #print(runningpositions.loc[runningpositions['openbuyqty']])
         for index, row in runningpositions.iterrows():
             #allm2m = allm2m +  float(row['urmtom'])
+            strategycm2m = strategycm2m +  float(row['urmtom'])
             if (row['netqty'] != '0'):
                 #print(row['tsym'], row['netqty'], row['urmtom'] )
-                strategycm2m = strategycm2m +  float(row['urmtom'])
+                
                 
                 if 'C' in row['tsym']:
                     strikeCE = row['tsym']
@@ -94,12 +113,12 @@ def hello():
                     strikePE = row['tsym']
                     pem2mquantity = int(row['netqty'])
             
-        print("strikeCE: " + str(strikeCE))
-        print("pem2mquantity: " + str(pem2mquantity))
-        print("strikePE: " + str(strikePE))
-        print("cem2mquantity: " + str(cem2mquantity))
-        print("allm2m: " + str(allm2m))
-        print("strategycm2m: " + str(strategycm2m))
+       # print("strikeCE: " + str(strikeCE))
+        #print("pem2mquantity: " + str(pem2mquantity))
+        #print("strikePE: " + str(strikePE))
+        #print("cem2mquantity: " + str(cem2mquantity))
+        #print("allm2m: " + str(allm2m))
+        #print("strategycm2m: " + str(strategycm2m))
         #print('Total Current M2M: ' + str(cm2m) + '  Target: ' + str(tartgetm2m))
         #print("---")
         #time.sleep(60)
@@ -107,20 +126,28 @@ def hello():
         urmtom = runningpositions.loc[runningpositions['urmtom'] != '0']
         
         runningcount = len(runningpositions.index)
-        print("Running count: " + str(runningcount))
+        #print("Running count: " + str(runningcount))
+        count = count + 1
+    return jsonify(text=(strategycm2m + count))
 
 
 
 
+
+@app.route('/hello', methods=['POST'])
+def hello():
     name = request.form.get('name')
     
     if name:
-       print('Request for hello page received with name=%s' % strategycm2m)
-       return render_template('hello.html', name = strategycm2m)
+       print('Request for hello page received with name=%s' % name)
+       return render_template('hello.html', name = name)
     else:
        print('Request for hello page received with no name or blank name -- redirecting')
        return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
-   app.run()
+    bg_task = Thread(target=update_text_background_task)
+    bg_task.daemon = True
+    bg_task.start()
+    app.run()
