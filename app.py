@@ -70,6 +70,7 @@ def favicon():
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
+
 def update_text_background_task():
     with app.app_context():
         while True:
