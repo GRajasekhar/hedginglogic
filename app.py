@@ -128,8 +128,8 @@ def get_text():
         
         runningcount = len(runningpositions.index)
         #print("Running count: " + str(runningcount))
-        count = count + 1
-    return jsonify(text=(strategycm2m + count))
+        #count = count + 1
+    return jsonify(text=(strategycm2m))
 
 
 
