@@ -3,8 +3,5 @@ NorenRestApiPy==0.0.22
 pandas==1.5.1
 pyotp==2.7.0
 Requests==2.31.0
+websocket_client==1.5.1
 gunicorn
-
-
-
-
