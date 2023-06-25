@@ -127,12 +127,12 @@ if __name__ == '__main__':
     bg_task.daemon = True
     bg_task.start()
 
-    background_thread = threading.Thread(target=background_raja_75410_task)
-    background_thread.daemon = True
-    background_thread.start()
+    background_thread_raja_75410 = threading.Thread(target=background_raja_75410_task)
+    background_thread_raja_75410.daemon = True
+    background_thread_raja_75410.start()
 
-    background_thread = threading.Thread(target=background_Amma_44006_task)
-    background_thread.daemon = True
-    background_thread.start()
+    background_thread_Amma_44006 = threading.Thread(target=background_Amma_44006_task)
+    background_thread_Amma_44006.daemon = True
+    background_thread_Amma_44006.start()
 
     app.run()
