@@ -56,6 +56,7 @@ def getdata():
     strategycm2m = 0.0
     
     count = count + 1
+    print(str(count))
     with open('amma_44006.txt', 'w') as file:
         file.write(str(count))
 

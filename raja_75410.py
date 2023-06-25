@@ -96,7 +96,8 @@ def getdata():
         
         runningcount = len(runningpositions.index)
         #print("Running count: " + str(runningcount))
-        count = count + 1
+        count = count + 100
+        print(str(strategycm2m+count))
         with open('raja_75410.txt', 'w') as file:
             file.write(str(strategycm2m+count))
 
