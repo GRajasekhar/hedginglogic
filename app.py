@@ -66,7 +66,6 @@ def FinvasiaLogin():
         return "Login failed4, algo restarting...."
 FinvasiaLogin()
 
-
 @app.route('/')
 def index():
    print('Request for index page received')
@@ -84,6 +83,28 @@ def update_text_background_task():
             updated_text = 'Updated text: ' + str(time.time())
             app.config['INITIAL_TEXT'] = updated_text
             time.sleep(1)  # Wait for 1 second before the next update
+
+
+@app.route('/hello', methods=['POST'])
+def hello():
+    global username
+    global raja_username
+    global am_username
+    username = request.form.get('username')
+    filedata = ''
+    
+    if username == '75410':
+       raja_username = username
+       print('Request for hello page received with username=%s' % username)
+       return redirect(url_for('raja75410'))
+    
+    if username == '44006':
+        am_username = username
+        print('Request for am_44006 page received with username=%s' % username)
+        return redirect(url_for('am75410'))
+    else:
+       print('Request for hello page received with no username or blank username -- redirecting')
+       redirect(url_for('index'))
 
 @app.route('/getprofitraja75410')
 def getprofitraja75410():
@@ -136,38 +157,6 @@ def getprofitraja75410():
     rajacount = rajacount + 100
     print(str(strategycm2m+rajacount))
     return jsonify(text=(str(strategycm2m+rajacount)))
-@app.route('/getprofitam44006')
-def getprofitam44006():
-    global amcount
-    #while True:
-    runningcount = 0
-    strategycm2m = 0.0
-    
-    amcount = amcount + 1
-    print(str(amcount))
-    return jsonify(text=(str(strategycm2m+amcount)))
-
-
-@app.route('/hello', methods=['POST'])
-def hello():
-    global username
-    global raja_username
-    global am_username
-    username = request.form.get('username')
-    filedata = ''
-    
-    if username == '75410':
-       raja_username = username
-       print('Request for hello page received with username=%s' % username)
-       return redirect(url_for('raja75410'))
-    
-    if username == '44006':
-        am_username = username
-        print('Request for am_44006 page received with username=%s' % username)
-        return redirect(url_for('am75410'))
-    else:
-       print('Request for hello page received with no username or blank username -- redirecting')
-       redirect(url_for('index'))
 
 @app.route('/raja75410')
 def raja75410():
@@ -181,6 +170,18 @@ def raja75410():
        print('Request for hello page received with no username or blank username -- redirecting')
        return redirect(url_for('index'))
     
+
+@app.route('/getprofitam44006')
+def getprofitam44006():
+    global amcount
+    #while True:
+    runningcount = 0
+    strategycm2m = 0.0
+    
+    amcount = amcount + 1
+    print(str(amcount))
+    return jsonify(text=(str(strategycm2m+amcount)))
+
 @app.route('/am75410')
 def am75410():
     global username
