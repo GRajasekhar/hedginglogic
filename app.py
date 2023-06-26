@@ -135,7 +135,8 @@ def getprofitraja75410():
         #print("Running count: " + str(runningcount))
     rajacount = rajacount + 100
     print(str(strategycm2m+rajacount))
-    return jsonify(text=(str(strategycm2m+rajacount)))
+    #return jsonify(text=(str(strategycm2m+rajacount)))
+    return jsonify(text=(str(strategycm2m)))
 @app.route('/getprofitam44006')
 def getprofitam44006():
     global amcount
