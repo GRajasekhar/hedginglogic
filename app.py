@@ -21,7 +21,7 @@ am_username = ''
 app = Flask(__name__)
 app.config['INITIAL_TEXT'] = 'Initial text'  # Initial text value
 
-
+returntext = ""
 rajacount = 0
 amcount = 0
 uid = str('FA75410')
@@ -88,6 +88,7 @@ def update_text_background_task():
 @app.route('/getprofitraja75410')
 def getprofitraja75410():
     global rajacount
+    global returntext
     #while True:
     runningcount = 0
     strategycm2m = 0.0
@@ -102,23 +103,41 @@ def getprofitraja75410():
         cem2mquantity = 0
         pem2mquantity = 0
         tartgetm2m = 0
+        returntext = ""
+        sl =0
+        tm2m = 0
+        roi = 0
         #tartgetm2m = int(int(OrderQuantity) * 12)
         
         #print(runningpositions.loc[runningpositions['openbuyqty']])
         for index, row in runningpositions.iterrows():
             #allm2m = allm2m +  float(row['urmtom'])
-            strategycm2m = strategycm2m +  float(row['urmtom'])
+            
             if (row['netqty'] != '0'):
                 #print(row['tsym'], row['netqty'], row['urmtom'] )
                 
                 
                 if 'C' in row['tsym']:
                     strikeCE = row['tsym']
-                    cem2mquantity = int(row['netqty'])
+                    cem2mquantity = str(row['netqty'])
+                    sl = (int(cem2mquantity))/40
+                    sl = sl * 2600
+                    cem2m = str(row['urmtom'])
+                    strategycm2m = strategycm2m +  float(row['urmtom'])
+                    if (returntext != ""):
+                        returntext = returntext +"~"+ strikeCE + "~" + cem2mquantity + "~" + cem2m 
+                    else:
+                        returntext = returntext + strikeCE + "~" + cem2mquantity + "~" + cem2m 
+
                 if 'P' in row['tsym']:
                     strikePE = row['tsym']
-                    pem2mquantity = int(row['netqty'])
-            
+                    pem2mquantity = str(row['netqty'])
+                    pem2m = str(row['urmtom'])
+                    strategycm2m = strategycm2m +  float(row['urmtom'])
+                    if (returntext != ""):
+                        returntext = returntext + "~" + strikePE + "~" + pem2mquantity + "~" + pem2m 
+                    else:
+                        returntext = returntext + strikePE + "~" + pem2mquantity + "~" + pem2m 
         # print("strikeCE: " + str(strikeCE))
         #print("pem2mquantity: " + str(pem2mquantity))
         #print("strikePE: " + str(strikePE))
@@ -133,10 +152,11 @@ def getprofitraja75410():
         
         runningcount = len(runningpositions.index)
         #print("Running count: " + str(runningcount))
+        returntext = returntext + "~" + str(strategycm2m)
     rajacount = rajacount + 100
     print(str(strategycm2m+rajacount))
-    #return jsonify(text=(str(strategycm2m+rajacount)))
-    return jsonify(text=(str(strategycm2m)))
+    #return jsonify(text=(str(returntext+rajacount)))
+    return jsonify(text=(str(returntext)))
 @app.route('/getprofitam44006')
 def getprofitam44006():
     global amcount
