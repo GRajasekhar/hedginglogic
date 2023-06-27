@@ -113,7 +113,7 @@ def getprofitraja75410():
         cem2m = 0
         pem2m = 0
         #tartgetm2m = int(int(OrderQuantity) * 12)
-        dff
+        
         #print(runningpositions.loc[runningpositions['openbuyqty']])
         for index, row in runningpositions.iterrows():
             #allm2m = allm2m +  float(row['urmtom'])
@@ -121,7 +121,7 @@ def getprofitraja75410():
             if (row['netqty'] != '0'):
                 #print(row['tsym'], row['netqty'], row['urmtom'] )
                 
-                dfdf
+                
                 if 'C' in row['tsym']:
                     strikeCE = row['tsym']
                     cem2mquantity = str(row['netqty'])

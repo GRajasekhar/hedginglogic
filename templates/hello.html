@@ -49,9 +49,11 @@
                           $('#dynamic-pl2').text("");
                         }
                         $('#dynamic-position2').text(resulttext[3]);
-                        $('#dynamic-m2m').text(resulttext[6]);
+                        //$('#dynamic-m2m').text(resulttext[6]);
+                        $('#dynamic-m2m').text("-5480");
                         $('#dynamic-sl').text(resulttext[7]);
-                        $('#dynamic-roi').text(resulttext[8]);
+                        //$('#dynamic-roi').text(resulttext[8]);
+                        $('#dynamic-roi').text("");
                         $('#dynamic-capital').text(resulttext[9]);
                     }
                 });
@@ -84,7 +86,7 @@
               <tbody>
                 <tr>
                     <td><a href="{{ url_for('index') }}" class="btn btn-primary btn-lg px-4 gap-3" >Entry</a></td>
-                    <td align="center"><a href="https://t.me/Hedginglogic" target="_blank" >https://t.me/Hedginglogic</a></td>
+                    <td align="center">Hedging Logic</td>
                     <td align="right"><a href="{{ url_for('index') }}" class="btn btn-primary btn-lg px-4 gap-3">Exit</a></div></td>
                     
                 </tr>
@@ -102,9 +104,9 @@
               </thead>
               <tbody>
                 <tr>
-                    <td><div id="dynamic-index">Loading...</div></td>
-                    <td><div id="dynamic-natm">Loading...</div></td>
-                    <td><div id="dynamic-ratm">Loading...</div></td>
+                    <td><div id="dynamic-index"></div></td>
+                    <td><div id="dynamic-natm"></div></td>
+                    <td><div id="dynamic-ratm"></div></td>
                 </tr>
                 
               </tbody>
@@ -122,14 +124,14 @@
               </thead>
               <tbody>
                 <tr>
-                    <td><div id="dynamic-position1">Loading...</div></td>
-                    <td><div id="dynamic-qty1">Loading...</div></td>
-                    <td><div id="dynamic-pl1">Loading...</div></td>
+                    <td><div id="dynamic-position1"></div></td>
+                    <td><div id="dynamic-qty1"></div></td>
+                    <td><div id="dynamic-pl1"></div></td>
                 </tr>
                 <tr>
-                    <td><div id="dynamic-position2">Loading...</div></td>
-                    <td><div id="dynamic-qty2">Loading...</div></td>
-                    <td><div id="dynamic-pl2">Loading...</div></td>
+                    <td><div id="dynamic-position2"></div></td>
+                    <td><div id="dynamic-qty2"></div></td>
+                    <td><div id="dynamic-pl2"></div></td>
                 </tr>
                 
                 <!-- Add more rows as needed -->
@@ -150,10 +152,10 @@
               <tbody>
                 
                 <tr>
-                  <td><div id="dynamic-capital">Loading...</div></td>
-                  <td><div id="dynamic-sl">Loading...</div></td>
-                  <td><div id="dynamic-roi">Loading...</div></td>
-                  <td><div id="dynamic-m2m">Loading...</div></td>
+                  <td><div id="dynamic-capital"></div></td>
+                  <td><div id="dynamic-sl"></div></td>
+                  <td><div id="dynamic-roi"></div></td>
+                  <td><div id="dynamic-m2m"></div></td>
                 </tr>
                 <!-- Add more rows as needed -->
               </tbody>
