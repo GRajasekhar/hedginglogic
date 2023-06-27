@@ -12,6 +12,7 @@ from NorenRestApiPy.NorenApi import NorenApi
 import pyotp
 import traceback
 import pandas as pd
+#import gunicorn
 username = ''
 raja_username = ''
 am_username = ''
@@ -108,12 +109,13 @@ def getprofitraja75410():
         tm2m = 0
         roi = 0
         capital = 0
+        rpnl = 0
         #tartgetm2m = int(int(OrderQuantity) * 12)
         
         #print(runningpositions.loc[runningpositions['openbuyqty']])
         for index, row in runningpositions.iterrows():
             #allm2m = allm2m +  float(row['urmtom'])
-            
+            rpnl = float(rpnl) + float(row["rpnl"])
             if (row['netqty'] != '0'):
                 #print(row['tsym'], row['netqty'], row['urmtom'] )
                 
@@ -125,8 +127,8 @@ def getprofitraja75410():
                     sl = sl * 2651
                     capital = (int(cem2mquantity))/40
                     capital = capital * 130000
-                    cem2m = str(row['urmtom'])
-                    strategycm2m = strategycm2m +  float(row['urmtom'])
+                    cem2m = str(float(row['urmtom']))
+                    strategycm2m = strategycm2m +  float(cem2m) 
                     if (returntext != ""):
                         returntext = returntext +"~"+ strikeCE + "~" + cem2mquantity + "~" + cem2m 
                     else:
@@ -139,8 +141,8 @@ def getprofitraja75410():
                     sl = sl * 2600
                     capital = (int(cem2mquantity))/40
                     capital = capital * 130000
-                    pem2m = str(row['urmtom'])
-                    strategycm2m = strategycm2m +  float(row['urmtom'])
+                    pem2m = str(float(row['urmtom'])) 
+                    strategycm2m = strategycm2m +  float(pem2m)
                     if (returntext != ""):
                         returntext = returntext + "~" + strikePE + "~" + pem2mquantity + "~" + pem2m 
                     else:
@@ -159,12 +161,15 @@ def getprofitraja75410():
         
         runningcount = len(runningpositions.index)
         if capital != 0 and strategycm2m != 0:
-            roi = (int(capital))/strategycm2m
+            strategycm2m = strategycm2m + + float(rpnl)
+            capital = float( str.replace(str(capital), '-', ''))
+            roi = int(strategycm2m)/(int(capital))
             roi = roi * 100
+            roi = round(roi, 2)
         else:
             roi = 0
         #print("Running count: " + str(runningcount))
-        returntext = returntext + "~" + str(strategycm2m) + "~" + str(sl) + "~" + str(roi)
+        returntext = returntext + "~" + str(strategycm2m) + "~" + str(sl) + "~" + str(roi) + "~" + str(int(capital))
     rajacount = rajacount + 100
     print(str(strategycm2m+rajacount))
     #return jsonify(text=(str(returntext+rajacount)))
