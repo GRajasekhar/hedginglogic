@@ -107,6 +107,7 @@ def getprofitraja75410():
         sl =0
         tm2m = 0
         roi = 0
+        capital = 0
         #tartgetm2m = int(int(OrderQuantity) * 12)
         
         #print(runningpositions.loc[runningpositions['openbuyqty']])
@@ -122,6 +123,8 @@ def getprofitraja75410():
                     cem2mquantity = str(row['netqty'])
                     sl = (int(cem2mquantity))/40
                     sl = sl * 2600
+                    capital = (int(cem2mquantity))/40
+                    capital = capital * 130000
                     cem2m = str(row['urmtom'])
                     strategycm2m = strategycm2m +  float(row['urmtom'])
                     if (returntext != ""):
@@ -132,6 +135,10 @@ def getprofitraja75410():
                 if 'P' in row['tsym']:
                     strikePE = row['tsym']
                     pem2mquantity = str(row['netqty'])
+                    sl = (int(pem2mquantity))/40
+                    sl = sl * 2600
+                    capital = (int(cem2mquantity))/40
+                    capital = capital * 130000
                     pem2m = str(row['urmtom'])
                     strategycm2m = strategycm2m +  float(row['urmtom'])
                     if (returntext != ""):
@@ -151,8 +158,13 @@ def getprofitraja75410():
         urmtom = runningpositions.loc[runningpositions['urmtom'] != '0']
         
         runningcount = len(runningpositions.index)
+        if capital != 0 and strategycm2m != 0:
+            roi = (int(capital))/strategycm2m
+            roi = roi * 100
+        else:
+            roi = 0
         #print("Running count: " + str(runningcount))
-        returntext = returntext + "~" + str(strategycm2m)
+        returntext = returntext + "~" + str(strategycm2m) + "~" + str(sl) + "~" + str(roi)
     rajacount = rajacount + 100
     print(str(strategycm2m+rajacount))
     #return jsonify(text=(str(returntext+rajacount)))
