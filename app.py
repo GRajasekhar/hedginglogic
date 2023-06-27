@@ -122,7 +122,7 @@ def getprofitraja75410():
                     strikeCE = row['tsym']
                     cem2mquantity = str(row['netqty'])
                     sl = (int(cem2mquantity))/40
-                    sl = sl * 2600
+                    sl = sl * 2651
                     capital = (int(cem2mquantity))/40
                     capital = capital * 130000
                     cem2m = str(row['urmtom'])
