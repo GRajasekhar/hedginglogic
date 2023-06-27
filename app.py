@@ -121,7 +121,7 @@ def getprofitraja75410():
             if (row['netqty'] != '0'):
                 #print(row['tsym'], row['netqty'], row['urmtom'] )
                 
-                
+                dfdf
                 if 'C' in row['tsym']:
                     strikeCE = row['tsym']
                     cem2mquantity = str(row['netqty'])
