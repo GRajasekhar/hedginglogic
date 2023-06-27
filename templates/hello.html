@@ -13,11 +13,42 @@
                     success: function(response) {
                         resulttext = response.text.split("~");
                         $('#dynamic-position1').text(resulttext[0]);
-                        $('#dynamic-qty1').text(resulttext[1]);
-                        $('#dynamic-pl1').text(resulttext[2]);
+                        if (resulttext[1] != "0")
+                        {
+                          $('#dynamic-qty1').text(resulttext[1]);  
+                        }
+                        else
+                        {
+                          $('#dynamic-qty1').text("");  
+                        }
+
+                        if (resulttext[4] != "0")
+                        {
+                          $('#dynamic-qty2').text(resulttext[4]); 
+                        }
+                        else
+                        {
+                          $('#dynamic-qty2').text(""); 
+                        }
+
+                        if (resulttext[2] != "0")
+                        {
+                          $('#dynamic-pl1').text(resulttext[2]);
+                        }
+                        else
+                        {
+                          $('#dynamic-pl1').text("");
+                        }
+
+                        if (resulttext[5] != "0")
+                        {
+                          $('#dynamic-pl2').text(resulttext[5]);
+                        }
+                        else
+                        {
+                          $('#dynamic-pl2').text("");
+                        }
                         $('#dynamic-position2').text(resulttext[3]);
-                        $('#dynamic-qty2').text(resulttext[4]);
-                        $('#dynamic-pl2').text(resulttext[5]);
                         $('#dynamic-m2m').text(resulttext[6]);
                         $('#dynamic-sl').text(resulttext[7]);
                         $('#dynamic-roi').text(resulttext[8]);

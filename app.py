@@ -109,7 +109,9 @@ def getprofitraja75410():
         tm2m = 0
         roi = 0
         capital = 0
-        rpnl = 0
+        rpnl = 0 
+        cem2m = 0
+        pem2m = 0
         #tartgetm2m = int(int(OrderQuantity) * 12)
         
         #print(runningpositions.loc[runningpositions['openbuyqty']])
@@ -146,7 +148,7 @@ def getprofitraja75410():
                     if (returntext != ""):
                         returntext = returntext + "~" + strikePE + "~" + pem2mquantity + "~" + pem2m 
                     else:
-                        returntext = returntext + strikePE + "~" + pem2mquantity + "~" + pem2m 
+                        returntext = returntext + strikePE + "~" + pem2mquantity + "~" + pem2m
         # print("strikeCE: " + str(strikeCE))
         #print("pem2mquantity: " + str(pem2mquantity))
         #print("strikePE: " + str(strikePE))
@@ -169,6 +171,17 @@ def getprofitraja75410():
         else:
             roi = 0
         #print("Running count: " + str(runningcount))
+        if strikeCE == "":
+            if (returntext != ""):
+                        returntext = returntext +"~"+ strikeCE + "~" + str(cem2mquantity) + "~" + str(cem2m) 
+            else:
+                returntext = returntext + strikeCE + "~" + str(cem2mquantity) + "~" + str(cem2m)
+        if strikePE == "":
+            if (returntext != ""):
+                        returntext = returntext + "~" + strikePE + "~" + str(pem2mquantity) + "~" + str(pem2m) 
+            else:
+                returntext = returntext + strikePE + "~" + str(pem2mquantity) + "~" + str(pem2m)
+
         returntext = returntext + "~" + str(strategycm2m) + "~" + str(sl) + "~" + str(roi) + "~" + str(int(capital))
     rajacount = rajacount + 100
     print(str(strategycm2m+rajacount))
