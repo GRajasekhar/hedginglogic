@@ -6,7 +6,25 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-           
+          $('#entryButton').click(function() {
+            $.ajax({
+                    url: '/entryFin',
+                    success: function(response) {
+                        
+                        alert(response);
+                    }
+                });
+            });
+            $('#exitButton').click(function() {
+            $.ajax({
+                    url: '/exitFin',
+                    success: function(response) {
+                        
+                        alert(response);
+                    }
+                });
+            });
+            
             function updateText() {
                 $.ajax({
                     url: '/getprofitraja75410',
@@ -85,9 +103,9 @@
              
               <tbody>
                 <tr>
-                    <td><a href="{{ url_for('index') }}" class="btn btn-primary btn-lg px-4 gap-3" >Entry</a></td>
+                    <td><button id="entryButton" class="btn btn-primary btn-lg px-4 gap-3" >Entry</button>
                     <td align="center">Algo Hedge </td>
-                    <td align="right"><a href="{{ url_for('index') }}" class="btn btn-primary btn-lg px-4 gap-3">Exit</a></div></td>
+                    <td><button id="exitButton" class="btn btn-primary btn-lg px-4 gap-3" >Exit</button>
                     
                 </tr>
                 

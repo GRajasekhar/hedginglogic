@@ -16,6 +16,9 @@ import pandas as pd
 username = ''
 raja_username = ''
 am_username = ''
+strikeCE = ''
+strikePE = ''
+fnlot = 1
 #pipreqs . pip install pipreqs
 
 
@@ -86,10 +89,76 @@ def update_text_background_task():
             app.config['INITIAL_TEXT'] = updated_text
             time.sleep(1)  # Wait for 1 second before the next update
 
+def AdjustExecuteOrders(orderstrick, orderlot, orderprice, buysell):
+  global FinvasiaClient
+  print('order received')
+
+  try:
+    if orderprice == '0':
+      pricetype = 'MKT'
+      priceo = 0
+    else:
+      pricetype = 'LMT'
+      priceo = orderprice
+
+    if orderlot == 0:
+      orderlot = 0
+
+    if buysell == 'B':
+      orderprice = str(float(orderprice) + 5)
+
+    if buysell == 'S':
+      orderprice = str(float(orderprice) - 5)
+
+    order1 = FinvasiaClient.place_order(
+      buy_or_sell=buysell,
+      product_type='I',
+      exchange='NFO',
+      tradingsymbol= orderstrick,
+      quantity=orderlot,
+      discloseqty=0,
+      price_type=pricetype,
+      price=orderprice,
+      retention='DAY',
+      #amo='Yes',
+      remarks='my_order_001')
+    print(order1)
+    return order1
+  except:
+    print("except occur & retry")
+    print(traceback.format_exc())
+    pass
+
+
+
+@app.route('/entryFin')
+def entryFin():
+    global strikeCE
+    global strikePE
+
+    order1 = AdjustExecuteOrders(str(strikeCE), 40 * fnlot,
+                              str(float(20)), 'S')
+    order2 = AdjustExecuteOrders(str(strikePE), 40 * fnlot,
+                              str(float(20)), 'S')
+    return jsonify(text=(str(str(order1["norenordno"])+"--" + str(order2["norenordno"]))))
+
+@app.route('/exitFin')
+def exitFin():
+    global strikeCE
+    global strikePE
+
+    order1 = AdjustExecuteOrders(str(strikeCE), 40 * fnlot,
+                              str(float(20)), 'B')
+    order2 = AdjustExecuteOrders(str(strikePE), 40 * fnlot,
+                              str(float(20)), 'B')
+    return jsonify(text=(str(str(order1["norenordno"])+"--" + str(order2["norenordno"]))))
+
 @app.route('/getprofitraja75410')
 def getprofitraja75410():
     global rajacount
     global returntext
+    global strikeCE
+    global strikePE
     #while True:
     runningcount = 0
     strategycm2m = 0.0
