@@ -37,6 +37,10 @@ imei = str('abc1234')
 totptoken = 'LT4742H72JRUS5H27442C426PB2747G7'
 totp = pyotp.TOTP(totptoken).now()
 print(totp)
+
+FINTradeAt = 19750
+FINsymbol = "FINNIFTY04JUL23"
+
 FinvasiaClient = ShoonyaApiPy()
 def FinvasiaLogin():
     try:
@@ -70,6 +74,31 @@ def FinvasiaLogin():
         return "Login failed4, algo restarting...."
 FinvasiaLogin()
 
+FINnumarraystk = []
+FINfirststk = int(FINTradeAt) - 500
+while FINfirststk != int(FINTradeAt) + 500:
+
+    FINpestk = FinvasiaClient.searchscrip(exchange="NFO",
+                                            searchtext=FINsymbol + 'P' +
+                                            str(FINfirststk))
+    FINcestk = FinvasiaClient.searchscrip(exchange="NFO",
+                                            searchtext=FINsymbol + 'C' +
+                                            str(FINfirststk))
+
+    if 'None' not in str(FINpestk) and 'None' not in str(FINcestk):
+        FINstkitem = {
+        'pestkitem': {
+            'strik': str(FINfirststk),
+            'strikvalue': pd.DataFrame(FINpestk).iloc[0][1]['token']
+        },
+        'cestkitem': {
+            'strik': str(FINfirststk),
+            'strikvalue': pd.DataFrame(FINcestk).iloc[0][1]['token']
+        }
+        }
+        FINnumarraystk.append(FINstkitem)
+    FINfirststk = FINfirststk + 50
+print("Strikes Count: " + str(len(FINnumarraystk)))
 
 @app.route('/')
 def index():
@@ -137,9 +166,9 @@ def entryFin():
     global strikePE
 
     order1 = AdjustExecuteOrders(str(strikeCE), 40 * fnlot,
-                              str(float(20)), 'S')
+                              str(float(0)), 'S')
     order2 = AdjustExecuteOrders(str(strikePE), 40 * fnlot,
-                              str(float(20)), 'S')
+                              str(float(0)), 'S')
     return jsonify(text=(str(str(order1["norenordno"])+"--" + str(order2["norenordno"]))))
 
 @app.route('/exitFin')
@@ -231,9 +260,10 @@ def getprofitraja75410():
         urmtom = runningpositions.loc[runningpositions['urmtom'] != '0']
         
         runningcount = len(runningpositions.index)
+        capital = float( str.replace(str(capital), '-', ''))
         if capital != 0 and strategycm2m != 0:
             strategycm2m = strategycm2m + + float(rpnl)
-            capital = float( str.replace(str(capital), '-', ''))
+            
             roi = int(strategycm2m)/(int(capital))
             roi = roi * 100
             roi = round(roi, 2)
