@@ -217,7 +217,7 @@ def getprofitraja75410():
         #print(runningpositions.loc[runningpositions['openbuyqty']])
         for index, row in runningpositions.iterrows():
             #allm2m = allm2m +  float(row['urmtom'])
-            rpnl = float(rpnl) + float(row["rpnl"])
+            #rpnl = float(rpnl) + float(row["rpnl"])
             if (row['netqty'] != '0'):
                 #print(row['tsym'], row['netqty'], row['urmtom'] )
                 
