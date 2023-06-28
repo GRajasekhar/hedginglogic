@@ -123,21 +123,23 @@ def AdjustExecuteOrders(orderstrick, orderlot, orderprice, buysell):
   print('order received')
 
   try:
-    if orderprice == '0':
+    if orderprice == '0' or orderprice == '0.0' :
       pricetype = 'MKT'
       priceo = 0
     else:
-      pricetype = 'LMT'
-      priceo = orderprice
+        if buysell == 'B':
+            orderprice = str(float(orderprice) + 5)
+
+        if buysell == 'S':
+            orderprice = str(float(orderprice) - 5)
+
+        pricetype = 'LMT'
+        priceo = orderprice
 
     if orderlot == 0:
       orderlot = 0
 
-    if buysell == 'B':
-      orderprice = str(float(orderprice) + 5)
-
-    if buysell == 'S':
-      orderprice = str(float(orderprice) - 5)
+   
 
     order1 = FinvasiaClient.place_order(
       buy_or_sell=buysell,
@@ -177,9 +179,9 @@ def exitFin():
     global strikePE
 
     order1 = AdjustExecuteOrders(str(strikeCE), 40 * fnlot,
-                              str(float(20)), 'B')
+                              str(float(0)), 'B')
     order2 = AdjustExecuteOrders(str(strikePE), 40 * fnlot,
-                              str(float(20)), 'B')
+                              str(float(0)), 'B')
     return jsonify(text=(str(str(order1["norenordno"])+"--" + str(order2["norenordno"]))))
 
 @app.route('/getprofitraja75410')
@@ -261,12 +263,17 @@ def getprofitraja75410():
         
         runningcount = len(runningpositions.index)
         capital = float( str.replace(str(capital), '-', ''))
+        
         if capital != 0 and strategycm2m != 0:
             strategycm2m = strategycm2m + + float(rpnl)
             
             roi = int(strategycm2m)/(int(capital))
             roi = roi * 100
             roi = round(roi, 2)
+            if "-" in str(strategycm2m) and "-" in str(sl):
+                if sl > strategycm2m and runningcount > 0:
+                    runningcount = 0
+                    exitFin()
         else:
             roi = 0
         #print("Running count: " + str(runningcount))
