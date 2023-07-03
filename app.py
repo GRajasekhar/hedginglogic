@@ -276,9 +276,7 @@ def getprofitraja75410():
         rpnl = 0 
         cem2m = 0
         pem2m = 0
-        #tartgetm2m = int(int(OrderQuantity) * 12)
         
-        #print(runningpositions.loc[runningpositions['openbuyqty']])
         for index, row in runningpositions.iterrows():
             #allm2m = allm2m +  float(row['urmtom'])
             #rpnl = float(rpnl) + float(row["rpnl"])
@@ -313,21 +311,13 @@ def getprofitraja75410():
                         returntext = returntext + "~" + strikePE + "~" + pem2mquantity + "~" + pem2m 
                     else:
                         returntext = returntext + strikePE + "~" + pem2mquantity + "~" + pem2m
-        # print("strikeCE: " + str(strikeCE))
-        #print("pem2mquantity: " + str(pem2mquantity))
-        #print("strikePE: " + str(strikePE))
-        #print("cem2mquantity: " + str(cem2mquantity))
-        #print("allm2m: " + str(allm2m))
-        #print("strategycm2m: " + str(strategycm2m))
-        #print('Total Current M2M: ' + str(cm2m) + '  Target: ' + str(tartgetm2m))
-        #print("---")
-        #time.sleep(60)
+        
         runningpositions = runningpositions.loc[runningpositions['netqty'] != '0']
         urmtom = runningpositions.loc[runningpositions['urmtom'] != '0']
         
         runningcount = len(runningpositions.index)
         capital = float( str.replace(str(capital), '-', ''))
-        strategycm2m = round(roi, 2)
+        
         if capital != 0 and strategycm2m != 0:
             strategycm2m = round(strategycm2m, 2)
             strategycm2m = strategycm2m + + float(rpnl)
@@ -341,7 +331,6 @@ def getprofitraja75410():
                     exitFin()
         else:
             roi = 0
-        #print("Running count: " + str(runningcount))
         if strikeCE == "":
             if (returntext != ""):
                         returntext = returntext +"~"+ strikeCE + "~" + str(cem2mquantity) + "~" + str(cem2m) 
