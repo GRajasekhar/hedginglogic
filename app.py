@@ -19,6 +19,7 @@ am_username = ''
 strikeCE = ''
 strikePE = ''
 fnlot = 1
+printcount = 0
 #pipreqs . pip install pipreqs
 
 
@@ -190,6 +191,69 @@ def getprofitraja75410():
     global returntext
     global strikeCE
     global strikePE
+    global all_strikes
+    global printcount
+    global FINCESTRIKEATMAt
+    global FINPESTRIKEATMAt
+    all_strikes = []
+    FINCESTRIKEATMAt = int(FINTradeAt) + 50
+    FINPESTRIKEATMAt = int(FINTradeAt) - 50
+    FINactivestik_p = ''
+    all_strikes.append('26009')
+    all_strikes.append('26037')
+    for s in FINnumarraystk:
+        if s['pestkitem']['strik'] == str(FINPESTRIKEATMAt):
+            FINactivestik_p = str(s['pestkitem']['strikvalue'])
+            FINpetokenATMAt = str(s['pestkitem']['strikvalue'])
+            all_strikes.append(FINactivestik_p)
+            FINactivestik_p = ''
+            break
+    for s in FINnumarraystk:
+        if s['cestkitem']['strik'] == str(FINCESTRIKEATMAt):
+            FINactivestik_c = str(s['cestkitem']['strikvalue'])
+            FINcetokenATMAt = str(s['cestkitem']['strikvalue'])
+            all_strikes.append(FINactivestik_c)
+            activestik_c = ''
+            break
+
+    totalcount = len(all_strikes)
+    for s in all_strikes:
+        if s == '26009' or s == '26037':
+            ret = FinvasiaClient.get_quotes(exchange="NSE", token=s)
+            if ret != 'NoneType':
+                TOKEN = ret['token']
+                LTP = ret['lp']
+
+                if TOKEN == '26009':  #and LTP != '0':
+                    BankNiftyIndex = int(float(LTP))
+
+                if TOKEN == '26037':  #and LTP != '0':
+                    FINiftyIndex = int(float(LTP))
+
+        else:
+            ret = FinvasiaClient.get_quotes(exchange="NFO", token=s)
+            if ret != 'NoneType':
+                TOKEN = ret['token']
+                LTP = ret['lp']
+                if TOKEN == str(FINpetokenATMAt):
+                    FINpevalueATMAt = float(LTP)
+
+                if TOKEN == str(FINcetokenATMAt):
+                    FINcevalueATMAt = float(LTP)
+
+    LTP = 0
+    TOKEN = 0
+    if printcount == 2:
+        printcount = 0
+        os.system('clear')
+    trademessage = str(FINCESTRIKEATMAt) + " CE " + str(
+        FINcevalueATMAt) + " " + str(FINPESTRIKEATMAt) + " PE " + str(
+        FINpevalueATMAt) 
+    print(trademessage)
+
+    printcount = printcount + 1
+    #ltpsubscribe(all_strikes)
+    
     #while True:
     runningcount = 0
     strategycm2m = 0.0
@@ -265,6 +329,7 @@ def getprofitraja75410():
         capital = float( str.replace(str(capital), '-', ''))
         
         if capital != 0 and strategycm2m != 0:
+            strategycm2m = strategycm2m(roi, 2)
             strategycm2m = strategycm2m + + float(rpnl)
             
             roi = int(strategycm2m)/(int(capital))
