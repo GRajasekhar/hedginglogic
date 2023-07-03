@@ -73,6 +73,9 @@
                         $('#dynamic-roi').text(resulttext[8]);
                         //$('#dynamic-roi').text("");
                         $('#dynamic-capital').text(resulttext[9]);
+                        $('#dynamic-finindex').text(resulttext[10]);
+                        $('#dynamic-bnindex').text(resulttext[11]);
+                        
                     }
                 });
             }
@@ -112,19 +115,21 @@
               </tbody>
             </table>
         </div>
-        
+
         <div class="container">
             <table class="table table-responsive table-striped table-bordered">
               <thead>
                 <tr>
-                  <th>Index</th>
+                  <th>FinNifty</th>
+                  <th>BankNifty</th>
                   <th>Near ATM</th>
                   <th>Trade ATM</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                    <td><div id="dynamic-index"></div></td>
+                    <td><div id="dynamic-finindex"></div></td>
+                    <td><div id="dynamic-bnindex"></div></td>
                     <td><div id="dynamic-natm"></div></td>
                     <td><div id="dynamic-ratm"></div></td>
                 </tr>

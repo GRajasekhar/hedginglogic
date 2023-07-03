@@ -1,4 +1,3 @@
-import os
 from flask import (Flask, redirect, render_template, request,
                    send_from_directory, url_for, jsonify)
 import pandas as pd
@@ -20,6 +19,8 @@ strikeCE = ''
 strikePE = ''
 fnlot = 1
 printcount = 0
+BankNiftyIndex = 0.0
+FINiftyIndex = 0.0
 #pipreqs . pip install pipreqs
 
 
@@ -195,6 +196,8 @@ def getprofitraja75410():
     global printcount
     global FINCESTRIKEATMAt
     global FINPESTRIKEATMAt
+    global BankNiftyIndex
+    global FINiftyIndex
     all_strikes = []
     FINCESTRIKEATMAt = int(FINTradeAt) + 50
     FINPESTRIKEATMAt = int(FINTradeAt) - 50
@@ -245,7 +248,7 @@ def getprofitraja75410():
     TOKEN = 0
     if printcount == 2:
         printcount = 0
-        os.system('clear')
+        #os.system('clear')
     trademessage = str(FINCESTRIKEATMAt) + " CE " + str(
         FINcevalueATMAt) + " " + str(FINPESTRIKEATMAt) + " PE " + str(
         FINpevalueATMAt) 
@@ -342,7 +345,7 @@ def getprofitraja75410():
             else:
                 returntext = returntext + strikePE + "~" + str(pem2mquantity) + "~" + str(pem2m)
 
-        returntext = returntext + "~" + str(strategycm2m) + "~" + str(sl) + "~" + str(roi) + "~" + str(int(capital))
+        returntext = returntext + "~" + str(strategycm2m) + "~" + str(sl) + "~" + str(roi) + "~" + str(int(capital)) + "~" + str(int(FINiftyIndex)) + "~" + str(int(BankNiftyIndex)) 
     rajacount = rajacount + 100
     print(str(strategycm2m+rajacount))
     #return jsonify(text=(str(returntext+rajacount)))
