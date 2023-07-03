@@ -327,9 +327,9 @@ def getprofitraja75410():
         
         runningcount = len(runningpositions.index)
         capital = float( str.replace(str(capital), '-', ''))
-        
+        strategycm2m = round(roi, 2)
         if capital != 0 and strategycm2m != 0:
-            strategycm2m = strategycm2m(roi, 2)
+            strategycm2m = round(strategycm2m, 2)
             strategycm2m = strategycm2m + + float(rpnl)
             
             roi = int(strategycm2m)/(int(capital))
