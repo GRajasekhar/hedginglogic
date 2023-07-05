@@ -11,10 +11,12 @@ from NorenRestApiPy.NorenApi import NorenApi
 import pyotp
 import traceback
 import pandas as pd
-from oauth2client.service_account import ServiceAccountCredentials
-from telethon import TelegramClient, events
-import gspread
+
 import pytz
+import priceupdate
+
+
+
 #import gunicorn
 username = ''
 raja_username = ''
@@ -44,33 +46,13 @@ totptoken = 'LT4742H72JRUS5H27442C426PB2747G7'
 totp = pyotp.TOTP(totptoken).now()
 print(totp)
 
-telekey = '5551030547:AAH6pQELunbkTCwGm4O4O372XQXOTRZvEjg'
-client = TelegramClient('RajaTeleAlgo', '7722627','a83468f1a7a200a3fa28672ef1feb7c9')
 
-
-myscope = ['https://spreadsheets.google.com/feeds', 
-            'https://www.googleapis.com/auth/drive']
-
-mycred = ServiceAccountCredentials.from_json_keyfile_name('hlprj-377707-9d9ee1b7035e.json',myscope)
-
-wsclient =gspread.authorize(mycred)
-#ws = client.open("RJTRADE").sheet1
-wb = wsclient.open_by_key('1Ensy2EbpfrP7ol8KEHgVcihToqD7aYtcbpSJpZiBK8Y')
-
-ws = wb.worksheet('Data')
-BNsymbol = str(ws.cell(2, 1).value)
-FINsymbol = str(ws.cell(3, 1).value)
-totalpremium = float(ws.cell(6, 1).value)
-wsbntradeat = str(ws.cell(4, 1).value)
-wsfintradeat = str(ws.cell(5, 1).value)
-print(BNsymbol)
-print(FINsymbol)
-print(wsbntradeat)
-print(wsfintradeat)
-isstoptrade = False
 IST = pytz.timezone('Asia/Kolkata')
 
-
+FINCESTRIKEATMAt = 0
+FINcevalueATMAt = 0
+FINPESTRIKEATMAt =0
+FINpevalueATMAt =0
 
 FinvasiaClient = ShoonyaApiPy()
 def FinvasiaLogin():
@@ -105,15 +87,17 @@ def FinvasiaLogin():
         return "Login failed4, algo restarting...."
 FinvasiaLogin()
 
+
+
 FINnumarraystk = []
-FINfirststk = int(wsfintradeat) - 500
-while FINfirststk != int(wsfintradeat) + 500:
+FINfirststk = int(priceupdate.wsfintradeat) - 500
+while FINfirststk != int(priceupdate.wsfintradeat) + 500:
 
     FINpestk = FinvasiaClient.searchscrip(exchange="NFO",
-                                            searchtext=FINsymbol + 'P' +
+                                            searchtext=priceupdate.FINsymbol + 'P' +
                                             str(FINfirststk))
     FINcestk = FinvasiaClient.searchscrip(exchange="NFO",
-                                            searchtext=FINsymbol + 'C' +
+                                            searchtext=priceupdate.FINsymbol + 'C' +
                                             str(FINfirststk))
 
     if 'None' not in str(FINpestk) and 'None' not in str(FINcestk):
@@ -143,6 +127,9 @@ def favicon():
 
 def update_text_background_task():
     with app.app_context():
+        background_thread = threading.Thread(target=priceupdate.getdata)
+        background_thread.daemon = True  
+        background_thread.start()
         while True:
             # Perform any necessary data updates here
             updated_text = 'Updated text: ' + str(time.time())
@@ -227,9 +214,11 @@ def getprofitraja75410():
     global FINPESTRIKEATMAt
     global BankNiftyIndex
     global FINiftyIndex
+    global FINcevalueATMAt
+    global FINpevalueATMAt
     all_strikes = []
-    FINCESTRIKEATMAt = int(wsfintradeat)
-    FINPESTRIKEATMAt = int(wsfintradeat)
+    FINCESTRIKEATMAt = int(priceupdate.wsfintradeat)
+    FINPESTRIKEATMAt = int(priceupdate.wsfintradeat)
     FINactivestik_p = ''
     all_strikes.append('26009')
     all_strikes.append('26037')
@@ -374,7 +363,7 @@ def getprofitraja75410():
             else:
                 returntext = returntext + strikePE + "~" + str(pem2mquantity) + "~" + str(pem2m)
 
-        returntext = returntext + "~" + str(strategycm2m) + "~" + str(sl) + "~" + str(roi) + "~" + str(int(capital)) + "~" + str(int(FINiftyIndex)) + "~" + str(int(BankNiftyIndex)) 
+        returntext = returntext + "~" + str(strategycm2m) + "~" + str(sl) + "~" + str(roi) + "~" + str(int(capital)) + "~" + str(int(FINiftyIndex)) + "~" + str(int(BankNiftyIndex)) + "~" + str(priceupdate.enteredPremium)
     rajacount = rajacount + 100
     print(str(strategycm2m+rajacount))
     #return jsonify(text=(str(returntext+rajacount)))
@@ -441,5 +430,5 @@ if __name__ == '__main__':
     bg_task = Thread(target=update_text_background_task)
     bg_task.daemon = True
     bg_task.start()
-
+    
     app.run()
