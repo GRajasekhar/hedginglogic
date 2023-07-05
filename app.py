@@ -11,10 +11,48 @@ from NorenRestApiPy.NorenApi import NorenApi
 import pyotp
 import traceback
 import pandas as pd
-
+import os
 import pytz
-import priceupdate
+from telethon import TelegramClient, events
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import time
 
+telekey = '5551030547:AAH6pQELunbkTCwGm4O4O372XQXOTRZvEjg'
+#client = TelegramClient('RajaTeleAlgo', '7722627','a83468f1a7a200a3fa28672ef1feb7c9')
+
+
+myscope = ['https://spreadsheets.google.com/feeds', 
+            'https://www.googleapis.com/auth/drive']
+
+mycred = ServiceAccountCredentials.from_json_keyfile_name('hlprj-377707-9d9ee1b7035e.json',myscope)
+
+wsclient =gspread.authorize(mycred)
+#ws = client.open("RJTRADE").sheet1
+wb = wsclient.open_by_key('1Ensy2EbpfrP7ol8KEHgVcihToqD7aYtcbpSJpZiBK8Y')
+
+ws = wb.worksheet('Data')
+FINsymbol =""
+enteredPremium = ""
+wsfintradeat = 0.0
+def getdata():
+    global FINsymbol
+    global wsfintradeat
+    global enteredPremium
+    while True:
+        BNsymbol = str(ws.cell(2, 1).value)
+        FINsymbol = str(ws.cell(3, 1).value)
+        totalpremium = float(ws.cell(6, 1).value)
+        wsbntradeat = str(ws.cell(4, 1).value)
+        wsfintradeat = str(ws.cell(5, 1).value)
+        enteredPremium = str(ws.cell(6, 1).value)
+        print(BNsymbol)
+        print(FINsymbol)
+        print(wsbntradeat)
+        print(wsfintradeat)
+        print(enteredPremium)
+        isstoptrade = False
+        time.sleep(5)
 
 
 #import gunicorn
@@ -90,14 +128,14 @@ FinvasiaLogin()
 
 
 FINnumarraystk = []
-FINfirststk = int(priceupdate.wsfintradeat) - 500
-while FINfirststk != int(priceupdate.wsfintradeat) + 500:
+FINfirststk = int(wsfintradeat) - 500
+while FINfirststk != int(wsfintradeat) + 500:
 
     FINpestk = FinvasiaClient.searchscrip(exchange="NFO",
-                                            searchtext=priceupdate.FINsymbol + 'P' +
+                                            searchtext=FINsymbol + 'P' +
                                             str(FINfirststk))
     FINcestk = FinvasiaClient.searchscrip(exchange="NFO",
-                                            searchtext=priceupdate.FINsymbol + 'C' +
+                                            searchtext=FINsymbol + 'C' +
                                             str(FINfirststk))
 
     if 'None' not in str(FINpestk) and 'None' not in str(FINcestk):
@@ -127,7 +165,7 @@ def favicon():
 
 def update_text_background_task():
     with app.app_context():
-        background_thread = threading.Thread(target=priceupdate.getdata)
+        background_thread = threading.Thread(target=getdata)
         background_thread.daemon = True  
         background_thread.start()
         while True:
@@ -216,9 +254,13 @@ def getprofitraja75410():
     global FINiftyIndex
     global FINcevalueATMAt
     global FINpevalueATMAt
+    global FINsymbol
+    global wsfintradeat
+    global enteredPremium
+
     all_strikes = []
-    FINCESTRIKEATMAt = int(priceupdate.wsfintradeat)
-    FINPESTRIKEATMAt = int(priceupdate.wsfintradeat)
+    FINCESTRIKEATMAt = int(wsfintradeat)
+    FINPESTRIKEATMAt = int(wsfintradeat)
     FINactivestik_p = ''
     all_strikes.append('26009')
     all_strikes.append('26037')
@@ -300,10 +342,10 @@ def getprofitraja75410():
         
         for index, row in runningpositions.iterrows():
             #allm2m = allm2m +  float(row['urmtom'])
-            #rpnl = float(rpnl) + float(row["rpnl"])
-            if (row['netqty'] != '0'):
+            
+            if (row['netqty'] != '0' and wsfintradeat in row['tsym'] and 'M' in row['prd']):
                 #print(row['tsym'], row['netqty'], row['urmtom'] )
-                
+                rpnl = float(rpnl) + float(row["rpnl"])
                 
                 if 'C' in row['tsym']:
                     strikeCE = row['tsym']
@@ -340,6 +382,7 @@ def getprofitraja75410():
         capital = float( str.replace(str(capital), '-', ''))
         
         if capital != 0 and strategycm2m != 0:
+            strategycm2m = rpnl + strategycm2m
             strategycm2m = round(strategycm2m, 2)
             strategycm2m = strategycm2m + + float(rpnl)
             
@@ -363,7 +406,7 @@ def getprofitraja75410():
             else:
                 returntext = returntext + strikePE + "~" + str(pem2mquantity) + "~" + str(pem2m)
 
-        returntext = returntext + "~" + str(strategycm2m) + "~" + str(sl) + "~" + str(roi) + "~" + str(int(capital)) + "~" + str(int(FINiftyIndex)) + "~" + str(int(BankNiftyIndex)) + "~" + str(priceupdate.enteredPremium)
+        returntext = returntext + "~" + str(strategycm2m) + "~" + str(sl) + "~" + str(roi) + "~" + str(int(capital)) + "~" + str(int(FINiftyIndex)) + "~" + str(int(BankNiftyIndex)) + "~" + str(enteredPremium)
     rajacount = rajacount + 100
     print(str(strategycm2m+rajacount))
     #return jsonify(text=(str(returntext+rajacount)))
