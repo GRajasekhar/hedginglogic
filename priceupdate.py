@@ -4,7 +4,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import time
 
 telekey = '5551030547:AAH6pQELunbkTCwGm4O4O372XQXOTRZvEjg'
-client = TelegramClient('RajaTeleAlgo', '7722627','a83468f1a7a200a3fa28672ef1feb7c9')
+#client = TelegramClient('RajaTeleAlgo', '7722627','a83468f1a7a200a3fa28672ef1feb7c9')
 
 
 myscope = ['https://spreadsheets.google.com/feeds', 
