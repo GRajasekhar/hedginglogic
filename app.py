@@ -56,6 +56,7 @@ FINCESTRIKEATMAt = 0
 FINcevalueATMAt = 0
 FINPESTRIKEATMAt =0
 FINpevalueATMAt =0
+isFinChecked = False
 
 FinvasiaClient = ShoonyaApiPy()
 def FinvasiaLogin():
@@ -223,6 +224,7 @@ def getprofitraja75410():
     global FINsymbol
     global wsfintradeat
     global enteredPremium
+    global isFinChecked
 
     all_strikes = []
     FINCESTRIKEATMAt = int(wsfintradeat)
@@ -448,7 +450,17 @@ def am75410():
        print('Request for hello page received with no username or blank username -- redirecting')
        return redirect(url_for('index'))
 
+@app.route('/fincheckboxchange', methods=['POST'])
+def fincheckboxchange():
+    global isFinChecked
+    data = request.get_json()
+    isFinChecked = data['isChecked']
+    # Handle the checkbox state change
+    # ...
 
+    # Return a response
+    response = {'message': 'Checkbox state changed successfully'}
+    return jsonify(response)
 
 if __name__ == '__main__':
     bg_task = Thread(target=update_text_background_task)

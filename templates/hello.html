@@ -6,6 +6,20 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+          $('#myCheckboxfinnifty').change(function() {
+                var isChecked = $(this).is(':checked');
+                // Send an AJAX request to the server
+                $.ajax({
+                    type: 'POST',
+                    url: '/fincheckboxchange',
+                    data: JSON.stringify({ 'isChecked': isChecked }),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        // Handle the response from the server
+                        console.log(response);
+                    }
+                });
+            });
           $('#entryButton').click(function() {
             $.ajax({
                     url: '/entryFin',
