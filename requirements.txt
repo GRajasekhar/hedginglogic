@@ -8,4 +8,3 @@ pytz==2023.3
 Requests==2.31.0
 Telethon==1.28.5
 websocket_client==1.5.1
-subprocess
