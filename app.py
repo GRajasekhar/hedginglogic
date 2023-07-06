@@ -13,47 +13,12 @@ import traceback
 import pandas as pd
 import os
 import pytz
-from telethon import TelegramClient, events
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-import time
 
-telekey = '5551030547:AAH6pQELunbkTCwGm4O4O372XQXOTRZvEjg'
-#client = TelegramClient('RajaTeleAlgo', '7722627','a83468f1a7a200a3fa28672ef1feb7c9')
+import subprocess
 
-
-myscope = ['https://spreadsheets.google.com/feeds', 
-            'https://www.googleapis.com/auth/drive']
-
-mycred = ServiceAccountCredentials.from_json_keyfile_name('hlprj-377707-9d9ee1b7035e.json',myscope)
-
-wsclient =gspread.authorize(mycred)
-#ws = client.open("RJTRADE").sheet1
-wb = wsclient.open_by_key('1Ensy2EbpfrP7ol8KEHgVcihToqD7aYtcbpSJpZiBK8Y')
-
-ws = wb.worksheet('Data')
 FINsymbol =""
 enteredPremium = ""
 wsfintradeat = 0.0
-def getdata():
-    global FINsymbol
-    global wsfintradeat
-    global enteredPremium
-    while True:
-        BNsymbol = str(ws.cell(2, 1).value)
-        FINsymbol = str(ws.cell(3, 1).value)
-        totalpremium = float(ws.cell(6, 1).value)
-        wsbntradeat = str(ws.cell(4, 1).value)
-        wsfintradeat = str(ws.cell(5, 1).value)
-        enteredPremium = str(ws.cell(6, 1).value)
-        print(BNsymbol)
-        print(FINsymbol)
-        print(wsbntradeat)
-        print(wsfintradeat)
-        print(enteredPremium)
-        isstoptrade = False
-        time.sleep(5)
-
 
 #import gunicorn
 username = ''
@@ -97,6 +62,7 @@ def FinvasiaLogin():
     try:
         global FinvasiaClient
         global isTeleError
+        global FINnumarraystk
         #time.sleep(60)
         #start of our program
 
@@ -110,6 +76,31 @@ def FinvasiaLogin():
         if FinvasiaClient is not None:
             print("Login Success....")
             #print("I am alive:....Waiting for Telegram Signal....")
+            FINnumarraystk = []
+            FINfirststk = int(wsfintradeat) - 500
+            while FINfirststk != int(wsfintradeat) + 500:
+
+                FINpestk = FinvasiaClient.searchscrip(exchange="NFO",
+                                                        searchtext=FINsymbol + 'P' +
+                                                        str(FINfirststk))
+                FINcestk = FinvasiaClient.searchscrip(exchange="NFO",
+                                                        searchtext=FINsymbol + 'C' +
+                                                        str(FINfirststk))
+
+                if 'None' not in str(FINpestk) and 'None' not in str(FINcestk):
+                    FINstkitem = {
+                    'pestkitem': {
+                        'strik': str(FINfirststk),
+                        'strikvalue': pd.DataFrame(FINpestk).iloc[0][1]['token']
+                    },
+                    'cestkitem': {
+                        'strik': str(FINfirststk),
+                        'strikvalue': pd.DataFrame(FINcestk).iloc[0][1]['token']
+                    }
+                    }
+                    FINnumarraystk.append(FINstkitem)
+                FINfirststk = FINfirststk + 50
+            print("Strikes Count: " + str(len(FINnumarraystk)))
             return "Login Success...."
         else:
             print("Login failed1, algo restarting....")
@@ -127,31 +118,7 @@ FinvasiaLogin()
 
 
 
-FINnumarraystk = []
-FINfirststk = int(wsfintradeat) - 500
-while FINfirststk != int(wsfintradeat) + 500:
 
-    FINpestk = FinvasiaClient.searchscrip(exchange="NFO",
-                                            searchtext=FINsymbol + 'P' +
-                                            str(FINfirststk))
-    FINcestk = FinvasiaClient.searchscrip(exchange="NFO",
-                                            searchtext=FINsymbol + 'C' +
-                                            str(FINfirststk))
-
-    if 'None' not in str(FINpestk) and 'None' not in str(FINcestk):
-        FINstkitem = {
-        'pestkitem': {
-            'strik': str(FINfirststk),
-            'strikvalue': pd.DataFrame(FINpestk).iloc[0][1]['token']
-        },
-        'cestkitem': {
-            'strik': str(FINfirststk),
-            'strikvalue': pd.DataFrame(FINcestk).iloc[0][1]['token']
-        }
-        }
-        FINnumarraystk.append(FINstkitem)
-    FINfirststk = FINfirststk + 50
-print("Strikes Count: " + str(len(FINnumarraystk)))
 
 @app.route('/')
 def index():
@@ -165,9 +132,8 @@ def favicon():
 
 def update_text_background_task():
     with app.app_context():
-        background_thread = threading.Thread(target=getdata)
-        background_thread.daemon = True  
-        background_thread.start()
+        command = ["python", "gsheet.py"]
+        subprocess.run(command)
         while True:
             # Perform any necessary data updates here
             updated_text = 'Updated text: ' + str(time.time())
@@ -473,5 +439,6 @@ if __name__ == '__main__':
     bg_task = Thread(target=update_text_background_task)
     bg_task.daemon = True
     bg_task.start()
+    
     
     app.run()
