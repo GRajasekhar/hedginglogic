@@ -305,11 +305,26 @@ def getprofitraja75410():
         rpnl = 0 
         cem2m = 0
         pem2m = 0
+        BNsymbol = ""
+        FINsymbol = ""
+        wsbntradeat = ""
+        wsfintradeat = 0.0
+        enteredPremium = ""
         
+        with open('gsheet.txt', 'r') as file:
+            gsheetdata = file.read()
+            gsheetdata = gsheetdata.split('~')
+            if(len(gsheetdata) == 5):
+                BNsymbol = str(gsheetdata[0])
+                FINsymbol = str(gsheetdata[1])
+                wsbntradeat = int(float(gsheetdata[2]))
+                wsfintradeat = int(float(gsheetdata[3]))
+                enteredPremium = str(gsheetdata[4])
+
         for index, row in runningpositions.iterrows():
             #allm2m = allm2m +  float(row['urmtom'])
             
-            if (row['netqty'] != '0' and wsfintradeat in row['tsym'] and 'M' in row['prd']):
+            if (row['netqty'] != '0' and str(wsfintradeat) in row['tsym'] and 'M' in row['prd']):
                 #print(row['tsym'], row['netqty'], row['urmtom'] )
                 rpnl = float(rpnl) + float(row["rpnl"])
                 

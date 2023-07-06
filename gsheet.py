@@ -25,7 +25,6 @@ wsfintradeat = 0.0
 while True:
     BNsymbol = str(ws.cell(2, 1).value)
     FINsymbol = str(ws.cell(3, 1).value)
-    totalpremium = float(ws.cell(6, 1).value)
     wsbntradeat = str(ws.cell(4, 1).value)
     wsfintradeat = str(ws.cell(5, 1).value)
     enteredPremium = str(ws.cell(6, 1).value)

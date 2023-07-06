@@ -93,16 +93,7 @@
 <html>
    <body>
      <main>
-        <div class="px-4 py-3 my-2 text-center">
-            <!--<img class="d-block mx-auto mb-4" src="{{ url_for('static', filename='images/azure-icon.svg') }}" alt="Azure Logo" width="192" height="192"/>
-            <img  src="/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> 
-            <h1 class="display-6 fw-bold">Hello {{username}}</h1>-->
-           
-            
-            
-            
-            
-        </div>
+        
         <div class="container">
             <table class="table table-responsive table-striped table-bordered">
              
@@ -117,7 +108,20 @@
               </tbody>
             </table>
         </div>
-
+        <div class="container">
+          <form method="POST" action="/process_checkbox">
+          <table class="table table-responsive table-striped table-bordered">
+           
+            <tbody>
+              <tr>
+                  <td align="left"><label>All </label> <input type="checkbox" id="myCheckboxall"> </td>
+                  <td align="left"><label>FinNifty </label> <input type="checkbox" id="myCheckboxfinnifty" ></td>
+                  <td align="left"><label>BankNifty </label> <input type="checkbox" id="myCheckboxbanknifty" ></td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </div>
         <div class="container">
             <table class="table table-responsive table-striped table-bordered">
               <thead>
