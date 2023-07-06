@@ -101,6 +101,18 @@
 
             // Update text every 2 seconds
             setInterval(updateText, 1000);
+
+            function updategsheetdata(){
+              $.ajax({
+                    url: '/getgsheetdata',
+                    success: function(response) {
+                        $('#dynamic-gscount').text(response.text);
+                        
+                    }
+                });
+            }
+            updategsheetdata();
+            setInterval(updategsheetdata, 5000);
         });
     </script>
 </head>
@@ -128,6 +140,7 @@
            
             <tbody>
               <tr>
+                  <td align="left"><div id="dynamic-gscount"> </td>
                   <td align="left"><label>All </label> <input type="checkbox" id="myCheckboxall"> </td>
                   <td align="left"><label>FinNifty </label> <input type="checkbox" id="myCheckboxfinnifty" ></td>
                   <td align="left"><label>BankNifty </label> <input type="checkbox" id="myCheckboxbanknifty" ></td>

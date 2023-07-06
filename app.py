@@ -14,7 +14,25 @@ import pandas as pd
 import os
 import pytz
 
-import subprocess
+from telethon import TelegramClient, events
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import time
+
+telekey = '5551030547:AAH6pQELunbkTCwGm4O4O372XQXOTRZvEjg'
+#client = TelegramClient('RajaTeleAlgo', '7722627','a83468f1a7a200a3fa28672ef1feb7c9')
+
+
+myscope = ['https://spreadsheets.google.com/feeds', 
+            'https://www.googleapis.com/auth/drive']
+
+mycred = ServiceAccountCredentials.from_json_keyfile_name('hlprj-377707-9d9ee1b7035e.json',myscope)
+
+wsclient =gspread.authorize(mycred)
+#ws = client.open("RJTRADE").sheet1
+wb = wsclient.open_by_key('1Ensy2EbpfrP7ol8KEHgVcihToqD7aYtcbpSJpZiBK8Y')
+
+
 
 FINsymbol =""
 enteredPremium = ""
@@ -133,8 +151,8 @@ def favicon():
 
 def update_text_background_task():
     with app.app_context():
-        command = ["python", "gsheet.py"]
-        subprocess.run(command)
+        #command = ["python", "gsheet.py"]
+        #subprocess.run(command)
         while True:
             # Perform any necessary data updates here
             updated_text = 'Updated text: ' + str(time.time())
@@ -461,6 +479,37 @@ def fincheckboxchange():
     # Return a response
     response = {'message': 'Checkbox state changed successfully'}
     return jsonify(response)
+
+@app.route('/getgsheetdata')
+def getgsheetdata():
+    global BNsymbol
+    global FINsymbol
+    global wsbntradeat
+    global wsfintradeat
+    global enteredPremium
+    global printcount
+
+    printcount = printcount + 1
+    FINsymbol =""
+    enteredPremium = ""
+    wsfintradeat = 0.0
+    ws = wb.worksheet('Data')
+    BNsymbol = str(ws.cell(2, 1).value)
+    FINsymbol = str(ws.cell(3, 1).value)
+    wsbntradeat = str(ws.cell(4, 1).value)
+    wsfintradeat = int(float(ws.cell(5, 1).value))
+    enteredPremium = str(ws.cell(6, 1).value)
+    print(BNsymbol)
+    print(FINsymbol)
+    print(wsbntradeat)
+    print(wsfintradeat)
+    print(enteredPremium)
+    isstoptrade = False
+    with open('gsheet.txt', 'w') as file:
+        file.write(str(BNsymbol+"~"+FINsymbol+"~"+wsbntradeat+"~"+str(wsfintradeat)+"~"+enteredPremium))
+    time.sleep(5)
+    return jsonify(str(printcount))
+
 
 if __name__ == '__main__':
     bg_task = Thread(target=update_text_background_task)
