@@ -357,6 +357,7 @@ def getprofitraja75410():
                     capital = capital * 130000
                     rpnl = float(rpnl) + float(row["rpnl"])
                     cem2m = float(row['urmtom'])
+                    cem2m = round(cem2m, 2)
                     cem2m = str(cem2m + rpnl)
                     strategycm2m = strategycm2m +  float(cem2m) 
                     if (returntext != ""):
@@ -373,6 +374,7 @@ def getprofitraja75410():
                     capital = capital * 130000
                     rpnl = float(rpnl) + float(row["rpnl"])
                     pem2m = float(row['urmtom'])
+                    pem2m = round(pem2m, 2)
                     pem2m = str(pem2m + rpnl)
                     strategycm2m = strategycm2m +  float(pem2m)
                     if (returntext != ""):
