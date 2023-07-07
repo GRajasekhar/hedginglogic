@@ -100,7 +100,7 @@
             updateText();
 
             // Update text every 2 seconds
-            setInterval(updateText, 1000);
+            setInterval(updateText, 100);
 
             function updategsheetdata(){
               $.ajax({
@@ -112,7 +112,7 @@
                 });
             }
             updategsheetdata();
-            setInterval(updategsheetdata, 5000);
+            setInterval(updategsheetdata, 10000);
         });
     </script>
 </head>

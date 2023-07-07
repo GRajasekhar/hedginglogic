@@ -507,7 +507,7 @@ def getgsheetdata():
     isstoptrade = False
     with open('gsheet.txt', 'w') as file:
         file.write(str(BNsymbol+"~"+FINsymbol+"~"+wsbntradeat+"~"+str(wsfintradeat)+"~"+enteredPremium))
-    time.sleep(5)
+    #time.sleep(5)
     return jsonify(str(printcount))
 
 
