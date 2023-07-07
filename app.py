@@ -369,7 +369,7 @@ def getprofitraja75410():
                     pem2mquantity = str(row['netqty'])
                     sl = (int(pem2mquantity))/40
                     sl = sl * 2600
-                    capital = (int(cem2mquantity))/40
+                    capital = (int(pem2mquantity))/40
                     capital = capital * 130000
                     rpnl = float(rpnl) + float(row["rpnl"])
                     pem2m = float(row['urmtom'])
