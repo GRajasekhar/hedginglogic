@@ -346,7 +346,7 @@ def getprofitraja75410():
             
             if (row['netqty'] != '0' and str(wsfintradeat) in row['tsym'] and 'M' in row['prd']):
                 #print(row['tsym'], row['netqty'], row['urmtom'] )
-                rpnl = float(rpnl) + float(row["rpnl"])
+                #rpnl = float(rpnl) + float(row["rpnl"])
                 
                 if 'C' in row['tsym']:
                     strikeCE = row['tsym']
@@ -355,7 +355,9 @@ def getprofitraja75410():
                     sl = sl * 2651
                     capital = (int(cem2mquantity))/40
                     capital = capital * 130000
-                    cem2m = str(float(row['urmtom']))
+                    rpnl = float(rpnl) + float(row["rpnl"])
+                    cem2m = float(row['urmtom'])
+                    cem2m = str(cem2m + rpnl)
                     strategycm2m = strategycm2m +  float(cem2m) 
                     if (returntext != ""):
                         returntext = returntext +"~"+ strikeCE + "~" + cem2mquantity + "~" + cem2m 
@@ -369,7 +371,9 @@ def getprofitraja75410():
                     sl = sl * 2600
                     capital = (int(cem2mquantity))/40
                     capital = capital * 130000
-                    pem2m = str(float(row['urmtom'])) 
+                    rpnl = float(rpnl) + float(row["rpnl"])
+                    pem2m = float(row['urmtom'])
+                    pem2m = str(pem2m + rpnl)
                     strategycm2m = strategycm2m +  float(pem2m)
                     if (returntext != ""):
                         returntext = returntext + "~" + strikePE + "~" + pem2mquantity + "~" + pem2m 
@@ -383,9 +387,7 @@ def getprofitraja75410():
         capital = float( str.replace(str(capital), '-', ''))
         
         if capital != 0 and strategycm2m != 0:
-            strategycm2m = rpnl + strategycm2m
             strategycm2m = round(strategycm2m, 2)
-            strategycm2m = strategycm2m + + float(rpnl)
             
             roi = int(strategycm2m)/(int(capital))
             roi = roi * 100
