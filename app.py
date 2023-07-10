@@ -74,14 +74,32 @@ FINCESTRIKEATMAt = 0
 FINcevalueATMAt = 0
 FINPESTRIKEATMAt =0
 FINpevalueATMAt =0
+FINnumarraystk = []
 isFinChecked = False
-
+with open('gsheet.txt', 'r') as file:
+    gsheetdata = file.read()
+    gsheetdata = gsheetdata.split('~')
+    if(len(gsheetdata) == 5):
+        BNsymbol = str(gsheetdata[0])
+        FINsymbol = str(gsheetdata[1])
+        wsbntradeat = int(float(gsheetdata[2]))
+        wsfintradeat = int(float(gsheetdata[3]))
+        enteredPremium = str(gsheetdata[4])
 FinvasiaClient = ShoonyaApiPy()
 def FinvasiaLogin():
     try:
         global FinvasiaClient
         global isTeleError
         global FINnumarraystk
+        global FINCESTRIKEATMAt
+        global FINPESTRIKEATMAt
+        global BankNiftyIndex
+        global FINiftyIndex
+        global FINcevalueATMAt
+        global FINpevalueATMAt
+        global FINsymbol
+        global wsfintradeat
+        global enteredPremium
         #time.sleep(60)
         #start of our program
 
@@ -382,8 +400,8 @@ def getprofitraja75410():
                     else:
                         returntext = returntext + strikePE + "~" + pem2mquantity + "~" + pem2m
         
-        runningpositions = runningpositions.loc[runningpositions['netqty'] != '0']
-        urmtom = runningpositions.loc[runningpositions['urmtom'] != '0']
+        #runningpositions = runningpositions.loc[runningpositions['netqty'] != '0']
+        #urmtom = runningpositions.loc[runningpositions['urmtom'] != '0']
         
         runningcount = len(runningpositions.index)
         capital = float( str.replace(str(capital), '-', ''))
