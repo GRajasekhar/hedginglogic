@@ -90,6 +90,11 @@
                         $('#dynamic-finindex').text(resulttext[10]);
                         $('#dynamic-bnindex').text(resulttext[11]);
                         $('#dynamic-pricetest').text(resulttext[12]);
+                        $('#BankNiftyTrade').text(resulttext[13]);
+                        $('#bntradeat').text(resulttext[14]);
+                        $('#FinNiftyTrade').text(resulttext[15]);
+                        $('#fntradeat').text(resulttext[16]);
+                        $('#totalPremium').text(resulttext[17]);
                         
                         
                     }
@@ -126,7 +131,7 @@
               <tbody>
                 <tr>
                     <td><!--<button id="entryButton" class="btn btn-primary btn-lg px-4 gap-3" >Entry</button>--><div id="dynamic-pricetest"></div></td>
-                    <td align="center">Algo Hedge </td>
+                    <td align="center" <h1 class="display-6 fw-bold text-primary">Hedging Logic</h1></td>
                     <td align="right"><!--<button id="exitButton" class="btn btn-primary btn-lg px-4 gap-3" >Exit</button>--></td>
                     
                 </tr>
@@ -142,35 +147,30 @@
               <tr>
                   <td align="left"><div id="dynamic-gscount"> </td>
                   <td align="left"><label>All </label> <input type="checkbox" id="myCheckboxall"> </td>
-                  <td align="left"><label>FinNifty </label> <input type="checkbox" id="myCheckboxfinnifty" ></td>
-                  <td align="left"><label>BankNifty </label> <input type="checkbox" id="myCheckboxbanknifty" ></td>
+                  <td align="left"><label id="dynamic-finindex"> </label> <input type="checkbox" id="myCheckboxfinnifty"></td>
+                  <td align="left"><label id="dynamic-bnindex"> </label> <input type="checkbox" id="myCheckboxbanknifty"></td>
               </tr>
             </tbody>
           </table>
         </form>
       </div>
-        <div class="container">
-            <table class="table table-responsive table-striped table-bordered">
-              <thead>
-                <tr>
-                  <th>FinNifty</th>
-                  <th>BankNifty</th>
-                  <th>Near ATM</th>
-                  <th>Trade ATM</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                    <td><div id="dynamic-finindex"></div></td>
-                    <td><div id="dynamic-bnindex"></div></td>
-                    <td><div id="dynamic-natm"></div></td>
-                    <td><div id="dynamic-ratm"></div></td>
-                </tr>
+      <div class="container">
+        <table class="table table-responsive table-striped table-bordered">
+         
+          <tbody>
+            <tr>
+                <td align="left"><input type="text" class="form-control" id="BankNiftyTrade" name="username" style="max-width: 256px;" text=""> </td>
+                <td align="left"><input type="text" class="form-control" id="bntradeat" name="username" style="max-width: 256px;" text=""> </td>
+                <td align="left"><input type="text" class="form-control" id="FinNiftyTrade" name="username" style="max-width: 256px;" text=""></td>
+                <td align="left"><input type="text" class="form-control" id="fntradeat" name="username" style="max-width: 256px;" text=""></td>
+                <td align="left"><input type="text" class="form-control" id="totalPremium" name="username" style="max-width: 256px;" text=""></td>
+                <td align="left"><button type="submit" >Ok</button></td>
                 
-              </tbody>
-            </table>
-          
-        </div>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
 
         <div class="container">
             <table class="table table-responsive table-striped table-bordered">

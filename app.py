@@ -114,29 +114,7 @@ def FinvasiaLogin():
             print("Login Success....")
             #print("I am alive:....Waiting for Telegram Signal....")
             FINnumarraystk = []
-            FINfirststk = int(wsfintradeat) - 500
-            while FINfirststk != int(wsfintradeat) + 500:
-
-                FINpestk = FinvasiaClient.searchscrip(exchange="NFO",
-                                                        searchtext=FINsymbol + 'P' +
-                                                        str(FINfirststk))
-                FINcestk = FinvasiaClient.searchscrip(exchange="NFO",
-                                                        searchtext=FINsymbol + 'C' +
-                                                        str(FINfirststk))
-
-                if 'None' not in str(FINpestk) and 'None' not in str(FINcestk):
-                    FINstkitem = {
-                    'pestkitem': {
-                        'strik': str(FINfirststk),
-                        'strikvalue': pd.DataFrame(FINpestk).iloc[0][1]['token']
-                    },
-                    'cestkitem': {
-                        'strik': str(FINfirststk),
-                        'strikvalue': pd.DataFrame(FINcestk).iloc[0][1]['token']
-                    }
-                    }
-                    FINnumarraystk.append(FINstkitem)
-                FINfirststk = FINfirststk + 50
+            
             print("Strikes Count: " + str(len(FINnumarraystk)))
             return "Login Success...."
         else:
@@ -458,14 +436,13 @@ def hello():
        raja_username = username
        print('Request for hello page received with username=%s' % username)
        return redirect(url_for('raja75410'))
-    
-    if username == '1960':
+    elif username == '1960':
         am_username = username
         print('Request for am_44006 page received with username=%s' % username)
         return redirect(url_for('am75410'))
     else:
-       print('Request for hello page received with no username or blank username -- redirecting')
-       redirect(url_for('index'))
+        print('Request for hello page received with no username or blank username -- redirecting')
+        return redirect(url_for('index'))
 
 @app.route('/raja75410')
 def raja75410():
