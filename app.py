@@ -432,7 +432,11 @@ def hello():
     username = request.form.get('username')
     filedata = ''
     
-    if username == '198983':
+    if username == 'adm1983':
+       raja_username = username
+       print('Request for hello page received with username=%s' % username)
+       return redirect(url_for('dashboard'))
+    elif username == '198983':
        raja_username = username
        print('Request for hello page received with username=%s' % username)
        return redirect(url_for('raja75410'))
@@ -450,7 +454,19 @@ def raja75410():
     if username == '198983':
        raja_username = username
        print('Request for hello page received with username=%s' % username)
-       return render_template('hello.html', username = username)
+       return render_template('raja75410.html', username = username)
+    
+    else:
+       print('Request for hello page received with no username or blank username -- redirecting')
+       return redirect(url_for('index'))
+    
+@app.route('/dashboard')
+def dashboard():
+    global username
+    if username == 'adm1983':
+       raja_username = username
+       print('Request for hello page received with username=%s' % username)
+       return render_template('dashboard.html', username = username)
     
     else:
        print('Request for hello page received with no username or blank username -- redirecting')

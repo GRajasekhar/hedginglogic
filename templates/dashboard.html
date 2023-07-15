@@ -1,0 +1,218 @@
+<!doctype html>
+<head>
+    <title>Algo-> RAJ Hedging Logic</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+          $('#myCheckboxfinnifty').change(function() {
+                var isChecked = $(this).is(':checked');
+                // Send an AJAX request to the server
+                $.ajax({
+                    type: 'POST',
+                    url: '/fincheckboxchange',
+                    data: JSON.stringify({ 'isChecked': isChecked }),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        // Handle the response from the server
+                        console.log(response);
+                    }
+                });
+            });
+          $('#entryButton').click(function() {
+            $.ajax({
+                    url: '/entryFin',
+                    success: function(response) {
+                        
+                        alert(response);
+                    }
+                });
+            });
+            $('#exitButton').click(function() {
+            $.ajax({
+                    url: '/exitFin',
+                    success: function(response) {
+                        
+                        alert(response);
+                    }
+                });
+            });
+            
+            function updateText() {
+                $.ajax({
+                    url: '/getprofitraja75410',
+                    success: function(response) {
+                        resulttext = response.text.split("~");
+                        $('#dynamic-position1').text(resulttext[0]);
+                        if (resulttext[1] != "0")
+                        {
+                          $('#dynamic-qty1').text(resulttext[1]);  
+                        }
+                        else
+                        {
+                          $('#dynamic-qty1').text("");  
+                        }
+
+                        if (resulttext[4] != "0")
+                        {
+                          $('#dynamic-qty2').text(resulttext[4]); 
+                        }
+                        else
+                        {
+                          $('#dynamic-qty2').text(""); 
+                        }
+
+                        if (resulttext[2] != "0")
+                        {
+                          $('#dynamic-pl1').text(resulttext[2]);
+                        }
+                        else
+                        {
+                          $('#dynamic-pl1').text("");
+                        }
+
+                        if (resulttext[5] != "0")
+                        {
+                          $('#dynamic-pl2').text(resulttext[5]);
+                        }
+                        else
+                        {
+                          $('#dynamic-pl2').text("");
+                        }
+                        $('#dynamic-position2').text(resulttext[3]);
+                        $('#dynamic-m2m').text(resulttext[6]);
+                        //$('#dynamic-m2m').text("-5480");
+                        $('#dynamic-sl').text(resulttext[7]);
+                        $('#dynamic-roi').text(resulttext[8]);
+                        //$('#dynamic-roi').text("");
+                        $('#dynamic-capital').text(resulttext[9]);
+                        $('#dynamic-finindex').text(resulttext[10]);
+                        $('#dynamic-bnindex').text(resulttext[11]);
+                        $('#dynamic-pricetest').text(resulttext[12]);
+                        $('#BankNiftyTrade').text(resulttext[13]);
+                        $('#bntradeat').text(resulttext[14]);
+                        $('#FinNiftyTrade').text(resulttext[15]);
+                        $('#fntradeat').text(resulttext[16]);
+                        $('#totalPremium').text(resulttext[17]);
+                        
+                        
+                    }
+                });
+            }
+
+            // Update text initially
+            updateText();
+
+            // Update text every 2 seconds
+            setInterval(updateText, 100);
+
+            function updategsheetdata(){
+              $.ajax({
+                    url: '/getgsheetdata',
+                    success: function(response) {
+                        $('#dynamic-gscount').text(response.text);
+                        
+                    }
+                });
+            }
+            updategsheetdata();
+            setInterval(updategsheetdata, 10000);
+        });
+    </script>
+</head>
+<html>
+   <body>
+     <main>
+        
+        <div class="container">
+            <table class="table table-responsive table-striped table-bordered">
+             
+              <tbody>
+                <tr>
+                    <td><!--<button id="entryButton" class="btn btn-primary btn-lg px-4 gap-3" >Entry</button>--><div id="dynamic-pricetest"></div></td>
+                    <td align="center" class="display-9 fw-bold text-primary"> HL Client Dashboard</td>
+                    <td align="right"><!--<button id="exitButton" class="btn btn-primary btn-lg px-4 gap-3" >Exit</button>--></td>
+                    
+                </tr>
+                
+              </tbody>
+            </table>
+        </div>
+        
+      
+ <!-- Raja -->
+        <div class="container">
+            <table class="table table-responsive table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th class="display-9 fw-bold text-primary">Raja Capital</th>
+                  <th class="display-9 fw-bold text-primary">Stop Loss</th>
+                  <th class="display-9 fw-bold text-primary">ROI & M2M</th>
+                </tr>
+                <tr>
+                  <th><div id="dynamic-capital">Loading..</div></th>
+                  <th><div id="dynamic-sl">Loading..</div></th>
+                  <th><div id="dynamic-roi">Loading..</div></th>
+                </tr>
+                <tr>
+                  <th class="display-9 fw-bold text-primary">Positions</th>
+                  <th class="display-9 fw-bold text-primary">Quantity</th>
+                  <th class="display-9 fw-bold text-primary">P&L</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td><div id="dynamic-position1">Loading..</div></td>
+                    <td><div id="dynamic-qty1">Loading..</div></td>
+                    <td><div id="dynamic-pl1">Loading..</div></td>
+                </tr>
+                <tr>
+                    <td><div id="dynamic-position2">Loading..</div></td>
+                    <td><div id="dynamic-qty2">Loading..</div></td>
+                    <td><div id="dynamic-pl2">Loading..</div></td>
+                </tr>
+                <!-- Add more rows as needed -->
+              </tbody>
+            </table>
+        </div>
+<!-- T Milind -->
+<div class="container">
+  <table class="table table-responsive table-striped table-bordered">
+    <thead>
+      <tr>
+        <th class="display-9 fw-bold text-primary">T Milind Capital</th>
+        <th class="display-9 fw-bold text-primary">Stop Loss</th>
+        <th class="display-9 fw-bold text-primary">ROI & M2M</th>
+      </tr>
+      <tr>
+        <th><div id="dynamic-capital">Loading..</div></th>
+        <th><div id="dynamic-sl">Loading..</div></th>
+        <th><div id="dynamic-roi">Loading..</div></th>
+      </tr>
+      <tr>
+        <th class="display-9 fw-bold text-primary">Positions</th>
+        <th class="display-9 fw-bold text-primary">Quantity</th>
+        <th class="display-9 fw-bold text-primary">P&L</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+          <td><div id="dynamic-position1">Loading..</div></td>
+          <td><div id="dynamic-qty1">Loading..</div></td>
+          <td><div id="dynamic-pl1">Loading..</div></td>
+      </tr>
+      <tr>
+          <td><div id="dynamic-position2">Loading..</div></td>
+          <td><div id="dynamic-qty2">Loading..</div></td>
+          <td><div id="dynamic-pl2">Loading..</div></td>
+      </tr>
+      <!-- Add more rows as needed -->
+    </tbody>
+  </table>
+</div>
+        
+        
+     </main>      
+   </body>
+</html>
