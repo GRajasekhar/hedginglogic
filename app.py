@@ -503,7 +503,7 @@ def getgsheetdata():
     global wsfintradeat
     global enteredPremium
     global printcount
-
+    global ws
     printcount = printcount + 1
     FINsymbol =""
     enteredPremium = ""
