@@ -31,7 +31,7 @@ mycred = ServiceAccountCredentials.from_json_keyfile_name('hlprj-377707-9d9ee1b7
 wsclient =gspread.authorize(mycred)
 #ws = client.open("RJTRADE").sheet1
 wb = wsclient.open_by_key('1Ensy2EbpfrP7ol8KEHgVcihToqD7aYtcbpSJpZiBK8Y')
-
+ws = wb.worksheet('Data')
 
 
 FINsymbol =""
@@ -57,13 +57,13 @@ app.config['INITIAL_TEXT'] = 'Initial text'  # Initial text value
 returntext = ""
 rajacount = 0
 amcount = 0
-uid = str('FA75410')
-pwd = str('Nar8@198983')
+uid = str(ws.cell(2, 6).value)
+pwd = str(ws.cell(3, 6).value)
 factor2 = str('15-04-1983')
-vc = str('FA75410_U')
-app_key = str('29ae32c0f6585938605c4ca65258fdd8')
-imei = str('abc1234')
-totptoken = 'LT4742H72JRUS5H27442C426PB2747G7'
+vc = str(ws.cell(4, 6).value)
+app_key = str(ws.cell(5, 6).value)
+imei = str(ws.cell(6, 6).value)
+totptoken = str(ws.cell(7, 6).value)
 totp = pyotp.TOTP(totptoken).now()
 print(totp)
 
@@ -508,7 +508,7 @@ def getgsheetdata():
     FINsymbol =""
     enteredPremium = ""
     wsfintradeat = 0.0
-    ws = wb.worksheet('Data')
+    
     BNsymbol = str(ws.cell(2, 1).value)
     FINsymbol = str(ws.cell(3, 1).value)
     wsbntradeat = str(ws.cell(4, 1).value)
