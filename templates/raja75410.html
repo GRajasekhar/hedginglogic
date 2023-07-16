@@ -41,7 +41,7 @@
             
             function updateText() {
                 $.ajax({
-                    url: '/getprofitraja75410',
+                    url: '/getraja75410pagedata',
                     success: function(response) {
                         resulttext = response.text.split("~");
                         $('#dynamic-position1').text(resulttext[0]);
