@@ -83,6 +83,48 @@ RajaFinvasiaClient = ShoonyaApiPy()
 AMFinvasiaClient = ShoonyaApiPy()
 ManoharFinvasiaClient = ShoonyaApiPy()
 MilindFinvasiaClient = ShoonyaApiPy()
+def AdjustExecuteOrders(FinClient, orderstrick, orderlot, orderprice, buysell):
+  global RajaFinvasiaClient
+  print('order received')
+
+  try:
+    if orderprice == '0' or orderprice == '0.0' :
+      pricetype = 'MKT'
+      priceo = 0
+    else:
+        if buysell == 'B':
+            orderprice = str(float(orderprice) + 5)
+
+        if buysell == 'S':
+            orderprice = str(float(orderprice) - 5)
+
+        pricetype = 'LMT'
+        priceo = orderprice
+
+    if orderlot == 0:
+      orderlot = 0
+
+   
+
+    order1 = FinClient.place_order(
+      buy_or_sell=buysell,
+      product_type='I',
+      exchange='NFO',
+      tradingsymbol= orderstrick,
+      quantity=orderlot,
+      discloseqty=0,
+      price_type=pricetype,
+      price=orderprice,
+      retention='DAY',
+      #amo='Yes',
+      remarks='my_order_001')
+    print(order1)
+    return order1
+  except:
+    print("except occur & retry")
+    print(traceback.format_exc())
+    pass
+
 def RajaFinvasiaLogin():
     try:
         global RajaFinvasiaClient
@@ -93,8 +135,8 @@ def RajaFinvasiaLogin():
                              vendor_code=Rajavc,
                              api_secret=Rajaapp_key,
                              imei=Rajaimei)
-
-        if RajaFinvasiaClient is not None:
+        time.sleep(3)
+        if RajaFinvasiaClient._NorenApi__username == 'FA75410':
             print("RajaFinvasiaClient Login Success....")
             #print("I am alive:....Waiting for Telegram Signal....")
             FINnumarraystk = []
@@ -124,8 +166,9 @@ def AMFinvasiaLogin():
                              vendor_code=amvc,
                              api_secret=amapp_key,
                              imei=amimei)
+        time.sleep(3)
 
-        if AMFinvasiaClient is not None:
+        if AMFinvasiaClient._NorenApi__username == 'FA44006':
             print("AMFinvasiaClient Login Success....")
             #print("I am alive:....Waiting for Telegram Signal....")
             FINnumarraystk = []
@@ -187,7 +230,7 @@ def MalindFinvasiaLogin():
                              api_secret=Milinapp_key,
                              imei=Milinimei)
 
-        if MilindFinvasiaClient is not None:
+        if MilindFinvasiaClient._NorenApi__username == 'FA28231':
             print("MilindFinvasiaClient Login Success....")
             #print("I am alive:....Waiting for Telegram Signal....")
             FINnumarraystk = []
@@ -206,11 +249,12 @@ def MalindFinvasiaLogin():
         pass
 
         return "MilindFinvasiaClient Login failed4, algo restarting...."
-
 RajaFinvasiaLogin()
 AMFinvasiaLogin()
-#ManoharFinvasiaLogin()
-MalindFinvasiaLogin()
+AdjustExecuteOrders(RajaFinvasiaClient,'FINNIFTY18JUL23P20000',0,'1','B')
+AdjustExecuteOrders(AMFinvasiaClient,'FINNIFTY18JUL23P20000',0,'1','B')
+#MalindFinvasiaLogin()
+
 
 
 FINsymbol =""
@@ -223,7 +267,6 @@ raja_username = ''
 am_username = ''
 strikeCE = ''
 strikePE = ''
-fnlot = 1
 printcount = 0
 BankNiftyIndex = 0.0
 FINiftyIndex = 0.0
@@ -268,23 +311,9 @@ def index():
    print('Request for index page received')
    return render_template('index.html')
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-def update_text_background_task():
-    with app.app_context():
-        #command = ["python", "gsheet.py"]
-        #subprocess.run(command)
-        while True:
-            # Perform any necessary data updates here
-            updated_text = 'Updated text: ' + str(time.time())
-            app.config['INITIAL_TEXT'] = updated_text
-            time.sleep(1)  # Wait for 1 second before the next update
-
-def AdjustExecuteOrders(orderstrick, orderlot, orderprice, buysell):
-  global RajaFinvasiaClient
+def MilindAdjustExecuteOrders(orderstrick, orderlot, orderprice, buysell):
+  global MilindFinvasiaClient
   print('order received')
 
   try:
@@ -306,7 +335,7 @@ def AdjustExecuteOrders(orderstrick, orderlot, orderprice, buysell):
 
    
 
-    order1 = RajaFinvasiaClient.place_order(
+    order1 = MilindFinvasiaClient.place_order(
       buy_or_sell=buysell,
       product_type='I',
       exchange='NFO',
@@ -325,6 +354,7 @@ def AdjustExecuteOrders(orderstrick, orderlot, orderprice, buysell):
     print(traceback.format_exc())
     pass
 
+#MilindAdjustExecuteOrders('FINNIFTY18JUL23P20000',40,'16','B')
 
 
 @app.route('/entryFin')
@@ -332,20 +362,20 @@ def entryFin():
     global strikeCE
     global strikePE
 
-    order1 = AdjustExecuteOrders(str(strikeCE), 40 * fnlot,
+    order1 = AdjustExecuteOrders(str(strikeCE), 40,
                               str(float(0)), 'S')
-    order2 = AdjustExecuteOrders(str(strikePE), 40 * fnlot,
+    order2 = AdjustExecuteOrders(str(strikePE), 40,
                               str(float(0)), 'S')
     return jsonify(text=(str(str(order1["norenordno"])+"--" + str(order2["norenordno"]))))
 
 @app.route('/exitFin')
-def exitFin():
+def exitFin(fnlot):
     global strikeCE
     global strikePE
 
-    order1 = AdjustExecuteOrders(str(strikeCE), 40 * fnlot,
+    order1 = AdjustExecuteOrders(str(strikeCE), int(fnlot),
                               str(float(0)), 'B')
-    order2 = AdjustExecuteOrders(str(strikePE), 40 * fnlot,
+    order2 = AdjustExecuteOrders(str(strikePE), int(fnlot),
                               str(float(0)), 'B')
     return jsonify(text=(str(str(order1["norenordno"])+"--" + str(order2["norenordno"]))))
 
@@ -422,7 +452,7 @@ def getprofitraja75410():
     trademessage = str(FINCESTRIKEATMAt) + " CE " + str(
         FINcevalueATMAt) + " " + str(FINPESTRIKEATMAt) + " PE " + str(
         FINpevalueATMAt) 
-    print(trademessage)
+    #print(trademessage)
 
     printcount = printcount + 1
     #ltpsubscribe(all_strikes)
@@ -446,6 +476,7 @@ def getprofitraja75410():
         tm2m = 0
         roi = 0
         capital = 0
+        fnlot = 0
         rpnl = 0 
         cem2m = 0
         pem2m = 0
@@ -505,7 +536,8 @@ def getprofitraja75410():
                         returntext = returntext + "~" + strikePE + "~" + pem2mquantity + "~" + pem2m 
                     else:
                         returntext = returntext + strikePE + "~" + pem2mquantity + "~" + pem2m
-        
+                if cem2mquantity == pem2mquantity:
+                    fnlot = cem2mquantity
         #runningpositions = runningpositions.loc[runningpositions['netqty'] != '0']
         #urmtom = runningpositions.loc[runningpositions['urmtom'] != '0']
         
@@ -521,7 +553,7 @@ def getprofitraja75410():
             if "-" in str(strategycm2m) and "-" in str(sl):
                 if sl > strategycm2m and runningcount > 0:
                     runningcount = 0
-                    exitFin()
+                    exitFin(fnlot)
         else:
             roi = 0
         if strikeCE == "":
@@ -537,7 +569,7 @@ def getprofitraja75410():
 
         returntext = returntext + "~" + str(strategycm2m) + "~" + str(sl) + "~" + str(roi) + "~" + str(int(capital)) + "~" + str(int(FINiftyIndex)) + "~" + str(int(BankNiftyIndex)) + "~" + str(enteredPremium)
     rajacount = rajacount + 100
-    print(str(strategycm2m+rajacount))
+    #print(str(strategycm2m+rajacount))
     #return jsonify(text=(str(returntext+rajacount)))
     return jsonify(text=(str(returntext)))
 @app.route('/getprofitam44006')
@@ -655,9 +687,6 @@ def getgsheetdata():
 
 
 if __name__ == '__main__':
-    bg_task = Thread(target=update_text_background_task)
-    bg_task.daemon = True
-    bg_task.start()
     
     
     app.run()
