@@ -627,17 +627,17 @@ def getgsheetdata():
     global wsfintradeat
     global enteredPremium
     global printcount
-    global ws
+    global Rajaws
     printcount = printcount + 1
     FINsymbol =""
     enteredPremium = ""
     wsfintradeat = 0.0
     
-    BNsymbol = str(ws.cell(2, 1).value)
-    FINsymbol = str(ws.cell(3, 1).value)
-    wsbntradeat = str(ws.cell(4, 1).value)
-    wsfintradeat = int(float(ws.cell(5, 1).value))
-    enteredPremium = str(ws.cell(6, 1).value)
+    BNsymbol = str(Rajaws.cell(2, 1).value)
+    FINsymbol = str(Rajaws.cell(3, 1).value)
+    wsbntradeat = str(Rajaws.cell(4, 1).value)
+    wsfintradeat = int(float(Rajaws.cell(5, 1).value))
+    enteredPremium = str(Rajaws.cell(6, 1).value)
     print(BNsymbol)
     print(FINsymbol)
     print(wsbntradeat)
