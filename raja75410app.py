@@ -1,5 +1,8 @@
 from flask import (Flask, redirect, render_template, request,
-                   send_from_directory, url_for, jsonify)
+                   send_from_directory, url_for, jsonify, Blueprint)
+# Create a Blueprint object for the sub-child application
+raja75410app = Blueprint('raja75410app', __name__)
+
 import pandas as pd
 from threading import Thread
 import threading
@@ -33,185 +36,49 @@ wsclient =gspread.authorize(mycred)
 #Raja
 rajawb = wsclient.open_by_key('1Ensy2EbpfrP7ol8KEHgVcihToqD7aYtcbpSJpZiBK8Y')
 Rajaws = rajawb.worksheet('RajaLogin')
-Rajauid = str(Rajaws.cell(2, 6).value)
-Rajapwd = str(Rajaws.cell(3, 6).value)
-Rajafactor2 = str('15-04-1983')
-Rajavc = str(Rajaws.cell(4, 6).value)
-Rajaapp_key = str(Rajaws.cell(5, 6).value)
-Rajaimei = str(Rajaws.cell(6, 6).value)
-Rajatotptoken = str(Rajaws.cell(7, 6).value)
-Rajatotp = pyotp.TOTP(Rajatotptoken).now()
-print(Rajatotp)
-#AM
-amwb = wsclient.open_by_key('1Yt5dp8MhUXx_3fBb5Ez1FJJkneaVhW5ZJxYkBNDbw3c')
-amws = amwb.worksheet('AMLogin')
-amuid = str(amws.cell(2, 6).value)
-ampwd = str(amws.cell(3, 6).value)
-amfactor2 = str('15-04-1983')
-amvc = str(amws.cell(4, 6).value)
-amapp_key = str(amws.cell(5, 6).value)
-amimei = str(amws.cell(6, 6).value)
-amtotptoken = str(amws.cell(7, 6).value)
-amtotp = pyotp.TOTP(amtotptoken).now()
-print(amtotp)
-#Manohar
-manoharwb = wsclient.open_by_key('1aIUXfnvgV3a9MNJK4l_QasLM7fzhwRkjqlU7pYCwY94')
-manoharws = manoharwb.worksheet('ManoharLogin')
-manoharuid = str(manoharws.cell(2, 6).value)
-manoharpwd = str(manoharws.cell(3, 6).value)
-manoharfactor2 = str('15-04-1983')
-manoharvc = str(manoharws.cell(4, 6).value)
-manoharapp_key = str(manoharws.cell(5, 6).value)
-manoharimei = str(manoharws.cell(6, 6).value)
-manohartotptoken = str(manoharws.cell(7, 6).value)
-manohartotp = pyotp.TOTP(manohartotptoken).now()
-print(manohartotp)
-#Milind
-Milinwb = wsclient.open_by_key('19b4I1Daf6-ZCtL1zdo7WJgo40BmIqKCmbQeHrYw2xd8')
-Milinws = Milinwb.worksheet('MilindLogin')
-Milinuid = str(Milinws.cell(2, 6).value)
-Milinpwd = str(Milinws.cell(3, 6).value)
-Milinfactor2 = str('15-04-1983')
-Milinvc = str(Milinws.cell(4, 6).value)
-Milinapp_key = str(Milinws.cell(5, 6).value)
-Milinimei = str(Milinws.cell(6, 6).value)
-Milintotptoken = str(Milinws.cell(7, 6).value)
-Milintotp = pyotp.TOTP(Milintotptoken).now()
-print(Milintotp)
+uid = str(Rajaws.cell(2, 6).value)
+pwd = str(Rajaws.cell(3, 6).value)
+factor2 = str('15-04-1983')
+vc = str(Rajaws.cell(4, 6).value)
+app_key = str(Rajaws.cell(5, 6).value)
+imei = str(Rajaws.cell(6, 6).value)
+totptoken = str(Rajaws.cell(7, 6).value)
+totp = pyotp.TOTP(totptoken).now()
+print(totp)
+
 
 RajaFinvasiaClient = ShoonyaApiPy()
-AMFinvasiaClient = ShoonyaApiPy()
-ManoharFinvasiaClient = ShoonyaApiPy()
-MilindFinvasiaClient = ShoonyaApiPy()
 def RajaFinvasiaLogin():
     try:
         global RajaFinvasiaClient
 
-        RajaFinvasiaClient.login(userid=Rajauid,
-                             password=Rajapwd,
-                             twoFA=Rajatotp,
-                             vendor_code=Rajavc,
-                             api_secret=Rajaapp_key,
-                             imei=Rajaimei)
+        RajaFinvasiaClient.login(userid=uid,
+                             password=pwd,
+                             twoFA=totp,
+                             vendor_code=vc,
+                             api_secret=app_key,
+                             imei=imei)
 
         if RajaFinvasiaClient is not None:
-            print("RajaFinvasiaClient Login Success....")
+            print("Login Success....")
             #print("I am alive:....Waiting for Telegram Signal....")
             FINnumarraystk = []
             
             print("Strikes Count: " + str(len(FINnumarraystk)))
-            return "RajaFinvasiaClient Login Success...."
+            return "Login Success...."
         else:
-            print("RajaFinvasiaClient Login failed1, algo restarting....")
-            #RajaFinvasiaLogin()
-            return "RajaFinvasiaClient Login failed2, app restarting...."
+            print("Login failed1, algo restarting....")
+            RajaFinvasiaLogin()
+            return "Login failed2, app restarting...."
     except:
-        print("RajaFinvasiaClient Login failed3, algo restarting....")
+        print("Login failed3, algo restarting....")
         print(traceback.format_exc())
 
-        #RajaFinvasiaLogin()
+        RajaFinvasiaLogin()
         pass
 
-        return "RajaFinvasiaClient Login failed4, algo restarting...."
-
-def AMFinvasiaLogin():
-    try:
-        global AMFinvasiaClient
-
-        AMFinvasiaClient.login(userid=amuid,
-                             password=ampwd,
-                             twoFA=amtotp,
-                             vendor_code=amvc,
-                             api_secret=amapp_key,
-                             imei=amimei)
-
-        if AMFinvasiaClient is not None:
-            print("AMFinvasiaClient Login Success....")
-            #print("I am alive:....Waiting for Telegram Signal....")
-            FINnumarraystk = []
-            
-            print("Strikes Count: " + str(len(FINnumarraystk)))
-            return " AMFinvasiaClient Login Success...."
-        else:
-            print("AMFinvasiaClient Login failed1, algo restarting....")
-            #AMFinvasiaLogin()
-            return " AMFinvasiaClient Login failed2, app restarting...."
-    except:
-        print(" AMFinvasiaClient Login failed3, algo restarting....")
-        print(traceback.format_exc())
-
-        #AMFinvasiaLogin()
-        pass
-
-        return "AMFinvasiaClient Login failed4, algo restarting...."
-
-def ManoharFinvasiaLogin():
-    try:
-        global ManoharFinvasiaClient
-
-        ManoharFinvasiaClient.login(userid=manoharuid,
-                             password=manoharpwd,
-                             twoFA=manohartotp,
-                             vendor_code=manoharvc,
-                             api_secret=manoharapp_key,
-                             imei=manoharimei)
-
-        if ManoharFinvasiaClient is not None:
-            print("ManoharFinvasiaClient Login Success....")
-            #print("I am alive:....Waiting for Telegram Signal....")
-            FINnumarraystk = []
-            
-            print("Strikes Count: " + str(len(FINnumarraystk)))
-            return " ManoharFinvasiaClient Login Success...."
-        else:
-            print("ManoharFinvasiaClient Login failed1, algo restarting....")
-            #ManoharFinvasiaLogin()
-            return " ManoharFinvasiaClient Login failed2, app restarting...."
-    except:
-        print(" ManoharFinvasiaClient Login failed3, algo restarting....")
-        print(traceback.format_exc())
-
-        #ManoharFinvasiaLogin()
-        pass
-
-        return "ManoharFinvasiaClient Login failed4, algo restarting...."
-
-def MalindFinvasiaLogin():
-    try:
-        global MilindFinvasiaClient
-
-        MilindFinvasiaClient.login(userid=Milinuid,
-                             password=Milinpwd,
-                             twoFA=Milintotp,
-                             vendor_code=Milinvc,
-                             api_secret=Milinapp_key,
-                             imei=Milinimei)
-
-        if MilindFinvasiaClient is not None:
-            print("MilindFinvasiaClient Login Success....")
-            #print("I am alive:....Waiting for Telegram Signal....")
-            FINnumarraystk = []
-            
-            print("Strikes Count: " + str(len(FINnumarraystk)))
-            return " MilindFinvasiaClient Login Success...."
-        else:
-            print("MilindFinvasiaClient Login failed1, algo restarting....")
-            #MalindFinvasiaLogin()
-            return " MilindFinvasiaClient Login failed2, app restarting...."
-    except:
-        print(" MilindFinvasiaClient Login failed3, algo restarting....")
-        print(traceback.format_exc())
-
-        #MalindFinvasiaLogin()
-        pass
-
-        return "MilindFinvasiaClient Login failed4, algo restarting...."
-
+        return "Login failed4, algo restarting...."
 RajaFinvasiaLogin()
-AMFinvasiaLogin()
-#ManoharFinvasiaLogin()
-MalindFinvasiaLogin()
-
 
 FINsymbol =""
 enteredPremium = ""
@@ -238,8 +105,6 @@ rajacount = 0
 amcount = 0
 
 
-
-
 IST = pytz.timezone('Asia/Kolkata')
 
 FINCESTRIKEATMAt = 0
@@ -263,7 +128,7 @@ with open('gsheet.txt', 'r') as file:
 
 
 
-@app.route('/')
+@app.route('/raja75410app')
 def index():
    print('Request for index page received')
    return render_template('index.html')
@@ -284,7 +149,7 @@ def update_text_background_task():
             time.sleep(1)  # Wait for 1 second before the next update
 
 def AdjustExecuteOrders(orderstrick, orderlot, orderprice, buysell):
-  global RajaFinvasiaClient
+  global FinvasiaClient
   print('order received')
 
   try:
@@ -306,7 +171,7 @@ def AdjustExecuteOrders(orderstrick, orderlot, orderprice, buysell):
 
    
 
-    order1 = RajaFinvasiaClient.place_order(
+    order1 = FinvasiaClient.place_order(
       buy_or_sell=buysell,
       product_type='I',
       exchange='NFO',
@@ -327,7 +192,7 @@ def AdjustExecuteOrders(orderstrick, orderlot, orderprice, buysell):
 
 
 
-@app.route('/entryFin')
+@app.route('/raja75410app/entryFin')
 def entryFin():
     global strikeCE
     global strikePE
@@ -338,7 +203,7 @@ def entryFin():
                               str(float(0)), 'S')
     return jsonify(text=(str(str(order1["norenordno"])+"--" + str(order2["norenordno"]))))
 
-@app.route('/exitFin')
+@app.route('/raja75410app/exitFin')
 def exitFin():
     global strikeCE
     global strikePE
@@ -349,7 +214,7 @@ def exitFin():
                               str(float(0)), 'B')
     return jsonify(text=(str(str(order1["norenordno"])+"--" + str(order2["norenordno"]))))
 
-@app.route('/getprofitraja75410')
+@app.route('/getprofitraja75410/data', methods=['POST'])
 def getprofitraja75410():
     global rajacount
     global returntext
@@ -392,7 +257,7 @@ def getprofitraja75410():
     totalcount = len(all_strikes)
     for s in all_strikes:
         if s == '26009' or s == '26037':
-            ret = RajaFinvasiaClient.get_quotes(exchange="NSE", token=s)
+            ret = FinvasiaClient.get_quotes(exchange="NSE", token=s)
             if ret != 'NoneType':
                 TOKEN = ret['token']
                 LTP = ret['lp']
@@ -404,7 +269,7 @@ def getprofitraja75410():
                     FINiftyIndex = int(float(LTP))
 
         else:
-            ret = RajaFinvasiaClient.get_quotes(exchange="NFO", token=s)
+            ret = FinvasiaClient.get_quotes(exchange="NFO", token=s)
             if ret != 'NoneType':
                 TOKEN = ret['token']
                 LTP = ret['lp']
@@ -430,7 +295,7 @@ def getprofitraja75410():
     #while True:
     runningcount = 0
     strategycm2m = 0.0
-    runningpositions = RajaFinvasiaClient.get_positions()
+    runningpositions = FinvasiaClient.get_positions()
     if not (runningpositions is None):
         runningpositions = pd.DataFrame(runningpositions)
         runningpositions = runningpositions.reset_index()
@@ -540,7 +405,7 @@ def getprofitraja75410():
     print(str(strategycm2m+rajacount))
     #return jsonify(text=(str(returntext+rajacount)))
     return jsonify(text=(str(returntext)))
-@app.route('/getprofitam44006')
+@app.route('/raja75410app/getprofitam44006')
 def getprofitam44006():
     global amcount
     #while True:
@@ -552,7 +417,7 @@ def getprofitam44006():
     return jsonify(text=(str(strategycm2m+amcount)))
 
 
-@app.route('/hello', methods=['POST'])
+@app.route('/raja75410app/hello', methods=['POST'])
 def hello():
     global username
     global raja_username
@@ -576,7 +441,7 @@ def hello():
         print('Request for hello page received with no username or blank username -- redirecting')
         return redirect(url_for('index'))
 
-@app.route('/raja75410')
+@app.route('/raja75410app/raja75410')
 def raja75410():
     global username
     if username == '198983':
@@ -588,7 +453,7 @@ def raja75410():
        print('Request for hello page received with no username or blank username -- redirecting')
        return redirect(url_for('index'))
     
-@app.route('/dashboard')
+@app.route('/raja75410app/dashboard')
 def dashboard():
     global username
     if username == 'adm1983':
@@ -600,7 +465,7 @@ def dashboard():
        print('Request for hello page received with no username or blank username -- redirecting')
        return redirect(url_for('index'))
     
-@app.route('/am75410')
+@app.route('/raja75410app/am75410')
 def am75410():
     global username
     if username == '44006':
@@ -611,7 +476,7 @@ def am75410():
        print('Request for hello page received with no username or blank username -- redirecting')
        return redirect(url_for('index'))
 
-@app.route('/fincheckboxchange', methods=['POST'])
+@app.route('/raja75410app/fincheckboxchange', methods=['POST'])
 def fincheckboxchange():
     global isFinChecked
     data = request.get_json()
@@ -623,7 +488,7 @@ def fincheckboxchange():
     response = {'message': 'Checkbox state changed successfully'}
     return jsonify(response)
 
-@app.route('/getgsheetdata')
+@app.route('/raja75410app/getgsheetdata')
 def getgsheetdata():
     global BNsymbol
     global FINsymbol
@@ -653,11 +518,3 @@ def getgsheetdata():
     #time.sleep(5)
     return jsonify(str(printcount))
 
-
-if __name__ == '__main__':
-    bg_task = Thread(target=update_text_background_task)
-    bg_task.daemon = True
-    bg_task.start()
-    
-    
-    app.run()

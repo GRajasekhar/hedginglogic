@@ -11,7 +11,7 @@
                 // Send an AJAX request to the server
                 $.ajax({
                     type: 'POST',
-                    url: '/fincheckboxchange',
+                    url: '/raja75410app/fincheckboxchange',
                     data: JSON.stringify({ 'isChecked': isChecked }),
                     contentType: 'application/json',
                     success: function(response) {
@@ -22,7 +22,7 @@
             });
           $('#entryButton').click(function() {
             $.ajax({
-                    url: '/entryFin',
+                    url: '/raja75410app/entryFin',
                     success: function(response) {
                         
                         alert(response);
@@ -31,7 +31,7 @@
             });
             $('#exitButton').click(function() {
             $.ajax({
-                    url: '/exitFin',
+                    url: '/raja75410app/exitFin',
                     success: function(response) {
                         
                         alert(response);
@@ -101,7 +101,7 @@
 
             function amupdateText() {
                 $.ajax({
-                    url: '/getprofitraja75410',
+                    url: '/raja75410app/getprofitraja75410',
                     success: function(response) {
                         resulttext = response.text.split("~");
                         $('#dynamic-rajaposition1').text(resulttext[0]);
@@ -154,10 +154,10 @@
             }
 
             // Update text initially
-            amupdateText();
+           // amupdateText();
 
             // Update text every 2 seconds
-            setInterval(amupdateText, 100);
+            //setInterval(amupdateText, 100);
             
         });
     </script>
