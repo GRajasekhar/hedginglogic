@@ -453,7 +453,7 @@ def getprofitraja75410():
                 wsbntradeat = int(float(gsheetdata[2]))
                 wsfintradeat = int(float(gsheetdata[3]))
                 enteredPremium = str(gsheetdata[4])
-
+        raja75410returntext = ""
         for index, row in runningpositions.iterrows():
             #allm2m = allm2m +  float(row['urmtom'])
             
