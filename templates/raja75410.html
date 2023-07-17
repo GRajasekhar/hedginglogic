@@ -41,7 +41,7 @@
             
             function updateText() {
                 $.ajax({
-                    url: '/getraja75410pagedata',
+                    url: '/raja75410returntext',
                     success: function(response) {
                         resulttext = response.text.split("~");
                         $('#dynamic-position1').text(resulttext[0]);
@@ -107,17 +107,7 @@
             // Update text every 2 seconds
             setInterval(updateText, 100);
 
-            function updategsheetdata(){
-              $.ajax({
-                    url: '/getgsheetdata',
-                    success: function(response) {
-                        $('#dynamic-gscount').text(response.text);
-                        
-                    }
-                });
-            }
-            updategsheetdata();
-            setInterval(updategsheetdata, 10000);
+            
         });
     </script>
 </head>
@@ -131,7 +121,7 @@
               <tbody>
                 <tr>
                     <td><!--<button id="entryButton" class="btn btn-primary btn-lg px-4 gap-3" >Entry</button>--><div id="dynamic-pricetest"></div></td>
-                    <td align="center" <h1 class="display-6 fw-bold text-primary">Hedging Logic</h1></td>
+                    <td align="center" class="display-9 fw-bold text-primary">Hedging Logic - Raja</td>
                     <td align="right"><!--<button id="exitButton" class="btn btn-primary btn-lg px-4 gap-3" >Exit</button>--></td>
                     
                 </tr>

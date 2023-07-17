@@ -23,7 +23,7 @@ import time
 if True:
     
     telekey = '5551030547:AAH6pQELunbkTCwGm4O4O372XQXOTRZvEjg'
-    #client = TelegramClient('RajaTeleAlgo', '7722627','a83468f1a7a200a3fa28672ef1feb7c9')
+    client = TelegramClient('RajaTeleAlgo', '7722627','a83468f1a7a200a3fa28672ef1feb7c9')
 
 
     myscope = ['https://spreadsheets.google.com/feeds', 
@@ -202,7 +202,7 @@ if True:
                                 api_secret=manoharapp_key,
                                 imei=manoharimei)
 
-            if ManoharFinvasiaClient is not None:
+            if ManoharFinvasiaClient._NorenApi__username =='FA28231':
                 print("ManoharFinvasiaClient Login Success....")
                 #print("I am alive:....Waiting for Telegram Signal....")
                 FINnumarraystk = []
@@ -254,8 +254,10 @@ if True:
             return "MilindFinvasiaClient Login failed4, algo restarting...."
     RajaFinvasiaLogin()
     AMFinvasiaLogin()
+    MalindFinvasiaLogin()
     AdjustExecuteOrders(RajaFinvasiaClient,'FINNIFTY18JUL23P20000',0,'1','B')
     AdjustExecuteOrders(AMFinvasiaClient,'FINNIFTY18JUL23P20000',0,'1','B')
+    AdjustExecuteOrders(MilindFinvasiaClient,'FINNIFTY18JUL23P20000',0,'1','B')
     #MalindFinvasiaLogin()
     FINsymbol =""
     enteredPremium = ""
@@ -272,6 +274,9 @@ if True:
     FINiftyIndex = 0.0
 
     raja75410returntext = ""
+    am44006returntext = ""
+    manoharreturntext = ""
+    milind28231returntext = ""
     rajacount = 0
     amcount = 0
 #pipreqs . pip install pipreqs
@@ -306,35 +311,6 @@ with open('gsheet.txt', 'r') as file:
 
 
 
-
-@app.route('/')
-def index():
-   print('Request for index page received')
-   return render_template('index.html')
-
-
-
-@app.route('/entryFin')
-def entryFin():
-    global strikeCE
-    global strikePE
-
-    order1 = AdjustExecuteOrders(str(strikeCE), 40,
-                              str(float(0)), 'S')
-    order2 = AdjustExecuteOrders(str(strikePE), 40,
-                              str(float(0)), 'S')
-    return jsonify(text=(str(str(order1["norenordno"])+"--" + str(order2["norenordno"]))))
-
-@app.route('/exitFin')
-def exitFin(fnlot):
-    global strikeCE
-    global strikePE
-
-    order1 = AdjustExecuteOrders(str(strikeCE), int(fnlot),
-                              str(float(0)), 'B')
-    order2 = AdjustExecuteOrders(str(strikePE), int(fnlot),
-                              str(float(0)), 'B')
-    return jsonify(text=(str(str(order1["norenordno"])+"--" + str(order2["norenordno"]))))
 
 @app.route('/getprofitraja75410')
 def getprofitraja75410():
@@ -531,22 +507,28 @@ def getprofitraja75410():
     #return jsonify(text=(str(raja75410returntext+rajacount)))
     
     return jsonify(text=(str(raja75410returntext)))
-@app.route('/getraja75410pagedata')
-def getraja75410pagedata():
+
+@app.route('/raja75410returntext')
+def raja75410returntext():
     global raja75410returntext
     return jsonify(text=(str(raja75410returntext)))
 
-@app.route('/getprofitam44006')
-def getprofitam44006():
-    global amcount
-    #while True:
-    runningcount = 0
-    strategycm2m = 0.0
-    
-    amcount = amcount + 1
-    print(str(amcount))
-    return jsonify(text=(str(strategycm2m+amcount)))
 
+@app.route('/am44006returntext')
+def am44006returntext():
+    global am44006returntext
+    return jsonify(text=(str(am44006returntext)))
+
+
+@app.route('/manoharreturntext')
+def manoharreturntext():
+    global manoharreturntext
+    return jsonify(text=(str(manoharreturntext)))
+
+@app.route('/milind28231returntext')
+def milind28231returntext():
+    global milind28231returntext
+    return jsonify(text=(str(milind28231returntext)))
 
 @app.route('/hello', methods=['POST'])
 def hello():
@@ -564,13 +546,18 @@ def hello():
        raja_username = username
        print('Request for hello page received with username=%s' % username)
        return redirect(url_for('raja75410'))
-    elif username == '1960':
+    elif username == '44006':
         am_username = username
         print('Request for am_44006 page received with username=%s' % username)
         return redirect(url_for('am75410'))
+    elif username == '28231':
+        am_username = username
+        print('Request for am_44006 page received with username=%s' % username)
+        return redirect(url_for('milind28231'))
     else:
         print('Request for hello page received with no username or blank username -- redirecting')
         return redirect(url_for('index'))
+
 
 @app.route('/raja75410')
 def raja75410():
@@ -579,18 +566,6 @@ def raja75410():
        raja_username = username
        print('Request for hello page received with username=%s' % username)
        return render_template('raja75410.html', username = username)
-    
-    else:
-       print('Request for hello page received with no username or blank username -- redirecting')
-       return redirect(url_for('index'))
-    
-@app.route('/dashboard')
-def dashboard():
-    global username
-    if username == 'adm1983':
-       raja_username = username
-       print('Request for hello page received with username=%s' % username)
-       return render_template('dashboard.html', username = username)
     
     else:
        print('Request for hello page received with no username or blank username -- redirecting')
@@ -607,6 +582,40 @@ def am75410():
        print('Request for hello page received with no username or blank username -- redirecting')
        return redirect(url_for('index'))
 
+@app.route('/milind28231')
+def milind28231():
+    global username
+    if username == '28231':
+        am_username = username
+        print('Request for milind28231 page received with username=%s' % username)
+        return render_template('milind28231.html', username = username)
+    else:
+       print('Request for hello page received with no username or blank username -- redirecting')
+       return redirect(url_for('index'))
+
+@app.route('/dashboard')
+def dashboard():
+    global username
+    if username == 'adm1983':
+       raja_username = username
+       print('Request for hello page received with username=%s' % username)
+       return render_template('dashboard.html', username = username)
+    
+    else:
+       print('Request for hello page received with no username or blank username -- redirecting')
+       return redirect(url_for('index'))
+
+@app.route('/getprofitam44006')
+def getprofitam44006():
+    global amcount
+    #while True:
+    runningcount = 0
+    strategycm2m = 0.0
+    
+    amcount = amcount + 1
+    print(str(amcount))
+    return jsonify(text=(str(strategycm2m+amcount)))
+
 @app.route('/fincheckboxchange', methods=['POST'])
 def fincheckboxchange():
     global isFinChecked
@@ -619,35 +628,33 @@ def fincheckboxchange():
     response = {'message': 'Checkbox state changed successfully'}
     return jsonify(response)
 
-@app.route('/getgsheetdata')
-def getgsheetdata():
-    global BNsymbol
-    global FINsymbol
-    global wsbntradeat
-    global wsfintradeat
-    global enteredPremium
-    global printcount
-    global Rajaws
-    printcount = printcount + 1
-    FINsymbol =""
-    enteredPremium = ""
-    wsfintradeat = 0.0
-    
-    BNsymbol = str(Rajaws.cell(2, 1).value)
-    FINsymbol = str(Rajaws.cell(3, 1).value)
-    wsbntradeat = str(Rajaws.cell(4, 1).value)
-    wsfintradeat = int(float(Rajaws.cell(5, 1).value))
-    enteredPremium = str(Rajaws.cell(6, 1).value)
-    print(BNsymbol)
-    print(FINsymbol)
-    print(wsbntradeat)
-    print(wsfintradeat)
-    print(enteredPremium)
-    isstoptrade = False
-    with open('gsheet.txt', 'w') as file:
-        file.write(str(BNsymbol+"~"+FINsymbol+"~"+wsbntradeat+"~"+str(wsfintradeat)+"~"+enteredPremium))
-    #time.sleep(5)
-    return jsonify(str(printcount))
+@app.route('/')
+def index():
+   print('Request for index page received')
+   return render_template('index.html')
+
+@app.route('/entryFin')
+def entryFin(FinClient,fnlot):
+    global strikeCE
+    global strikePE
+
+    order1 = AdjustExecuteOrders(str(strikeCE), int(fnlot),
+                              str(float(0)), 'S')
+    order2 = AdjustExecuteOrders(str(strikePE), int(fnlot),
+                              str(float(0)), 'S')
+    return jsonify(text=(str(str(order1["norenordno"])+"--" + str(order2["norenordno"]))))
+
+@app.route('/exitFin')
+def exitFin(FinClient,fnlot):
+    global strikeCE
+    global strikePE
+
+    order1 = AdjustExecuteOrders(FinClient,str(strikeCE), int(fnlot),
+                              str(float(0)), 'B')
+    order2 = AdjustExecuteOrders(FinClient,str(strikePE), int(fnlot),
+                              str(float(0)), 'B')
+    return jsonify(text=(str(str(order1["norenordno"])+"--" + str(order2["norenordno"]))))
+
 
 
 if __name__ == '__main__':
