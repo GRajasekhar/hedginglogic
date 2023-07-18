@@ -259,17 +259,13 @@ if True:
     AdjustExecuteOrders(AMFinvasiaClient,'FINNIFTY18JUL23P20000',0,'1','B')
     AdjustExecuteOrders(MilindFinvasiaClient,'FINNIFTY18JUL23P20000',0,'1','B')
     #MalindFinvasiaLogin()
+
     FINsymbol =""
     enteredPremium = ""
     wsfintradeat = 0.0
 
     #import gunicorn
     username = ''
-    raja_username = ''
-    am_username = ''
-    strikeCE = ''
-    strikePE = ''
-    printcount = 0
     BankNiftyIndex = 0.0
     FINiftyIndex = 0.0
 
@@ -279,6 +275,8 @@ if True:
     milind28231returntext = ""
     rajacount = 0
     amcount = 0
+    malindcount = 0
+    manoharcount = 0
 #pipreqs . pip install pipreqs
 
 
@@ -487,7 +485,7 @@ def getprofitraja75410():
             if "-" in str(strategycm2m) and "-" in str(sl):
                 if sl > strategycm2m and runningcount > 0:
                     runningcount = 0
-                    exitFin(fnlot)
+                    exitFin(RajaFinvasiaClient,fnlot)
         else:
             roi = 0
         if strikeCE == "":
