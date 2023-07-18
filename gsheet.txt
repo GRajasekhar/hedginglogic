@@ -1,1 +1,3 @@
-BANKNIFTY01JUN23~~44000~0.0~677
+BANKNIFTY01JUN23~~44000~20350~677
+
+file.write(str(BNsymbol+"~"+FINsymbol+"~"+wsbntradeat+"~"+wsfintradeat+"~"+enteredPremium))
